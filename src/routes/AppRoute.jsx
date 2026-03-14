@@ -11,6 +11,9 @@ import RootFrontLayout from '../Layout/RootFrontLayout';
 import HomePage from '../page/Front/HomePage'
 import Login from '../components/front/login';
 import Register from '../components/front/Register';
+import User from '../page/Dashboards/user';
+import LoginDS from '../components/dashboard/login';
+import ProductDetail from '../page/Front/ProductDetail ';
 const router = createBrowserRouter([
   {
     path: '/dashboard', 
@@ -23,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: 'admin', // no leading '/'
         element: <Admin />
+      },
+      {
+        path: 'user',
+        element: <User />
       },
       {
         path: 'customer',
@@ -39,16 +46,20 @@ const router = createBrowserRouter([
       {
         path: 'manager',
         element: <Manager />
+      },
+      {
+        path: 'login',
+        element: <LoginDS />
       }
     ],
   },
   {
-    path: '/',
-    element: <RootFrontLayout />,
-    children: [
-      { index: true, element: <HomePage /> },
-
-    ]
+  path: '/',
+  element: <RootFrontLayout />,
+  children: [
+    { index: true, element: <HomePage /> },
+    { path: 'product/:id', element: <ProductDetail /> }
+  ]
   },
   {
     path: '/login',

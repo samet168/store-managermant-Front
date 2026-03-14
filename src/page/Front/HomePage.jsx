@@ -1,17 +1,14 @@
 import React from 'react';
 import '../../style/Front/HomePage.css';
+import api from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
-const featuredProducts = [
-  { name: 'Earbud Y168A', price: '$270.00 USD', img: '/images/earbud.png' },
-  { name: 'Headphones Pro X168A', price: '$250.00 USD', img: '/images/headphones.png' },
-  { name: 'Speaker P168A', price: '$240.00 USD', img: '/images/speaker.png' },
-];
+// const categories = [
+//   { name: 'Speaker', img: '/images/speaker.png', link: '/category/speaker' },
+//   { name: 'Accessories', img: '/images/accessory.png', link: '/category/accessories' },
+//   { name: 'Wireless Charger', img: '/images/charger.png', link: '/category/wireless-charger' },
+// ];
 
-const categories = [
-  { name: 'Speaker', img: '/images/speaker.png', link: '/category/speaker' },
-  { name: 'Accessories', img: '/images/accessory.png', link: '/category/accessories' },
-  { name: 'Wireless Charger', img: '/images/charger.png', link: '/category/wireless-charger' },
-];
 
 const benefits = [
   { title: 'Free Delivery', icon: '🚚', desc: 'Free shipping on orders over $100' },
@@ -20,6 +17,41 @@ const benefits = [
 ];
 
 const HomePage = () => {
+
+  const [categories, setCategories] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/categories');
+        setCategories(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+
+const [products, setProducts] = React.useState([]);
+
+React.useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await api.get('/products');
+
+      setProducts(response.data.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchProducts();
+}, []);
+
+  const navigate = useNavigate()
+
   const handleAddToCart = (product) => {
     alert(`${product.name} added to cart!`);
   };
@@ -28,11 +60,9 @@ const HomePage = () => {
     alert(`Proceed to buy ${product.name}!`);
   };
 
-  const handleViewDetail = (product) => {
-    // Redirect to product detail page (replace spaces with dash)
-    const slug = product.name.replace(/\s+/g, '-').toLowerCase();
-    window.location.href = `/product/${slug}`;
-  };
+const handleViewDetail = (product) => {
+  navigate(`/product/${product.id}`);
+};
 
   return (
     <div className="homepage">
@@ -41,14 +71,18 @@ const HomePage = () => {
       <section className="hero">
         <div className="hero-content">
           <h1>Elevate Your Audio Journey</h1>
-          <p>Discover the best audio devices with premium sound quality. Explore earbuds, headphones, speakers, and more.</p>
+          <p>
+            Discover the best audio devices with premium sound quality.
+            Explore earbuds, headphones, speakers, and more.
+          </p>
           <div className="hero-buttons">
             <button className="shop-btn">Shop Now</button>
             <button className="learn-btn">Learn More</button>
           </div>
         </div>
+
         <div className="hero-image">
-          <img src="/images/hero-audio.png" alt="Hero Audio" />
+          <img src="https://i.pinimg.com/1200x/19/28/7c/19287c8799f8c0ce38103cfe7a240bea.jpg" alt="Hero Audio" />
         </div>
       </section>
 
@@ -58,39 +92,56 @@ const HomePage = () => {
           <h2>Featured Products</h2>
           <button className="see-all-btn">See All Products</button>
         </div>
+
         <div className="products-grid">
-          {featuredProducts.map((prod, index) => (
-            <div key={index} className="product-card">
-              <img src={prod.img} alt={prod.name} />
-              <h3>{prod.name}</h3>
-              <p className="price">{prod.price}</p>
-              
-              {/* Buttons shown on hover */}
+          {products.slice(0, 10).map((product) => (
+            <div key={product.id} className="product-card">
+
+              <img src={product.image} alt={product.name} />
+
+              <h3>{product.name}</h3>
+
+              <p className="price">${product.price}</p>
+
               <div className="product-buttons">
-                <button onClick={() => handleAddToCart(prod)}>Add to Cart</button>
-                <button onClick={() => handleBuyNow(prod)}>Buy Now</button>
-                <button onClick={() => handleViewDetail(prod)}>View Details</button>
+                <button onClick={() => handleAddToCart(product)}>
+                  Add to Cart
+                </button>
+
+                <button onClick={() => handleBuyNow(product)}>
+                  Buy Now
+                </button>
+
+                <button onClick={() => handleViewDetail(product)}>
+                  View Details
+                </button>
               </div>
+
             </div>
           ))}
         </div>
+
       </section>
 
       {/* Shop By Category */}
       <section className="categories">
         <h2>Shop By Category</h2>
+
         <div className="categories-grid">
           {categories.map((cat, index) => (
             <div key={index} className="category-card">
               <img src={cat.img} alt={cat.name} />
               <h3>{cat.name}</h3>
-              <a href={cat.link} className="view-btn">View Accessories</a>
+              <a href={cat.link} className="view-btn">
+                View Accessories
+              </a>
             </div>
           ))}
         </div>
+
       </section>
 
-      {/* Benefits Section */}
+      {/* Benefits */}
       <section className="benefits">
         <div className="benefits-grid">
           {benefits.map((b, index) => (

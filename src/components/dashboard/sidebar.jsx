@@ -19,6 +19,9 @@ const Sidebar = () => {
         <NavLink to="/dashboard/admin" className={({ isActive }) => isActive ? "active" : ""}>
           Admin
         </NavLink>
+        <NavLink to="/dashboard/user" className={({ isActive }) => isActive ? "active" : ""}>
+          User
+        </NavLink>
         <NavLink to="/dashboard/customer" className={({ isActive }) => isActive ? "active" : ""}>
           Customers
         </NavLink>

@@ -29,7 +29,7 @@ const Login = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_name", response.data.user.name);
 
-      window.location.href = "/";
+      window.location.href = "/dashboard";
 
     } catch (error) {
       console.error(error);
@@ -39,7 +39,7 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-container position-relative z-index-1 vh-100">
 
       <div className="auth-card">
 
@@ -69,9 +69,7 @@ const Login = () => {
 
         </form>
 
-        <p className="auth-footer">
-          Don't have an account? <a href="/register">Register here</a>
-        </p>
+
 
       </div>
 
