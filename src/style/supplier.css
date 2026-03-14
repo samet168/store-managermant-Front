@@ -1,0 +1,94 @@
+.supplier-page {
+  background-color: #1e1e2f;
+  color: #e0e0e0;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+/* Page title */
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #00d8ff;
+}
+
+/* Action buttons */
+.supplier-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add, .btn-export {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-add {
+  background-color: #00d8ff;
+  color: #1e1e2f;
+}
+
+.btn-add:hover {
+  background-color: #00bfff;
+}
+
+.btn-export {
+  background-color: #ffa500;
+  color: #1e1e2f;
+}
+
+.btn-export:hover {
+  background-color: #ff9500;
+}
+
+/* Supplier Table */
+.supplier-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.supplier-table th,
+.supplier-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #3a3c50;
+}
+
+.supplier-table th {
+  background-color: #27293d;
+}
+
+.supplier-table tbody tr:hover {
+  background-color: #2e2f47;
+}
+
+/* Table action buttons */
+.btn-edit, .btn-delete {
+  padding: 0.3rem 0.6rem;
+  margin-right: 0.3rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-edit {
+  background-color: #00d8ff;
+  color: #1e1e2f;
+}
+
+.btn-edit:hover {
+  background-color: #00bfff;
+}
+
+.btn-delete {
+  background-color: #ff4d4f;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: #ff1a1a;
+}

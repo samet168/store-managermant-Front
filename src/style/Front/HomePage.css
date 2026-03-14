@@ -1,0 +1,229 @@
+.homepage {
+  font-family: 'Segoe UI', sans-serif;
+  color: #1f2937;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 5%;
+  background-color: #1e40af;
+  color: white;
+  border-radius: 12px;
+  margin: 1rem;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+}
+
+.hero-buttons button {
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  margin-right: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.shop-btn {
+  background-color: #facc15;
+  color: #1e3a8a;
+}
+
+.shop-btn:hover {
+  background-color: #eab308;
+}
+
+.learn-btn {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.learn-btn:hover {
+  background-color: white;
+  color: #1e40af;
+}
+
+.hero-image img {
+  max-width: 400px;
+  border-radius: 12px;
+}
+
+/* Featured Products */
+.featured-products {
+  padding: 3rem 5%;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.product-card {
+  background: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.product-card img {
+  max-width: 150px;
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-weight: bold;
+  color: #1e40af;
+}
+
+/* Product buttons hidden by default */
+.product-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: bottom 0.3s;
+  width: 80%;
+}
+
+.product-card:hover .product-buttons {
+  bottom: 20px;
+}
+
+.product-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.product-buttons button:nth-child(1) {
+  background-color: #2563eb; /* Add to cart */
+  color: white;
+}
+
+.product-buttons button:nth-child(1):hover {
+  background-color: #1e40af;
+}
+
+.product-buttons button:nth-child(2) {
+  background-color: #facc15; /* Buy Now */
+  color: #1e3a8a;
+}
+
+.product-buttons button:nth-child(2):hover {
+  background-color: #eab308;
+}
+
+.product-buttons button:nth-child(3) {
+  background-color: #10b981; /* View Details */
+  color: white;
+}
+
+.product-buttons button:nth-child(3):hover {
+  background-color: #059669;
+}
+
+/* Categories */
+.categories {
+  padding: 3rem 5%;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  background: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+.category-card img {
+  max-width: 120px;
+  margin-bottom: 1rem;
+}
+
+.view-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  background-color: #1e40af;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.view-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Benefits Section */
+.benefits {
+  padding: 3rem 5%;
+  background-color: #f9fafb;
+}
+
+.benefits-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.benefit-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  flex: 1 1 200px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.benefit-card .icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}

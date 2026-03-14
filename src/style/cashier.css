@@ -1,0 +1,68 @@
+.cashier-page {
+  background-color: #1e1e2f;
+  color: #e0e0e0;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+/* Page Title */
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #00d8ff;
+}
+
+/* Quick Action Buttons */
+.cashier-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-action {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #00d8ff;
+  color: #1e1e2f;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-action:hover {
+  background-color: #00bfff;
+}
+
+/* Sales Table */
+.cashier-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cashier-table th,
+.cashier-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #3a3c50;
+}
+
+.cashier-table th {
+  background-color: #27293d;
+}
+
+.cashier-table tbody tr:hover {
+  background-color: #2e2f47;
+}
+
+/* Action buttons in table */
+.btn-edit {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #00d8ff;
+  color: #1e1e2f;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background-color: #00bfff;
+}

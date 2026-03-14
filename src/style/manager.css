@@ -1,0 +1,60 @@
+.manager-page {
+  background-color: #1e1e2f;
+  color: #e0e0e0;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+/* Page title */
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #00d8ff;
+}
+
+/* Overview cards */
+.manager-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  flex: 1 1 200px;
+  background-color: #27293d;
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.card:hover {
+  background-color: #00bfff;
+  color: #1e1e2f;
+  transform: translateY(-5px);
+}
+
+/* Reports section */
+.manager-reports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.report {
+  flex: 1 1 400px;
+  background-color: #27293d;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.report-placeholder {
+  height: 200px;
+  background-color: #1e1e2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  border-radius: 5px;
+}
