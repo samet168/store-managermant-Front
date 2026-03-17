@@ -1,0 +1,288 @@
+.product-page {
+  padding: 30px;
+  background: #f0f4f898;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-header h2 {
+  font-size: 24px;
+  color: #1e293b;
+}
+
+.btn-add {
+  background: #4CAF50;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-add:hover {
+  background: #43a047;
+}
+
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.search-box input:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: rgba(255, 255, 255, 0.799);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table th,
+.product-table td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid #424240d8;
+}
+
+.product-table th {
+  background: #e2e8f0;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.product-img {
+  width: 50px;
+  border-radius: 6px;
+}
+
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.btn-edit {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #1976d2;
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #d32f2f;
+}
+
+.in-stock {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.low-stock {
+  color: #f44336;
+  font-weight: 600;
+}
+
+@media (max-width: 768px){
+  .product-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* Container */
+.product-page {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-header h2 {
+  font-size: 28px;
+  color: #333;
+}
+
+.btn-add {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-add:hover {
+  background-color: #45a049;
+}
+
+/* Search Box */
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+.product-table th, .product-table td {
+  padding: 12px 15px;
+  text-align: center;
+}
+
+.product-table th {
+  background-color: #f5f5f5;
+  color: #555;
+  font-weight: 600;
+}
+
+.product-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Images */
+.product-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* Stock indicator */
+.low-stock {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.in-stock {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+/* Buttons */
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 2px;
+  transition: 0.3s;
+}
+
+.btn-edit {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.btn-edit:hover {
+  background-color: #2980b9;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  background-color: #f5f5f5;
+  border: none;
+  margin: 0 5px;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.pagination-btn:hover {
+  background-color: #ddd;
+}
+
+.pagination-btn.active {
+  background-color: #3498db;
+  color: #fff;
+}
+
+/* No Data & Loading */
+.no-data, .loading-text {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+  padding: 10px 0;
+}

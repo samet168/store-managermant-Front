@@ -1,82 +1,98 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import "../../style/Login.css"
+export default function Login() {
+  const navigate = useNavigate();
 
-const Login = () => {
+  const [form,    setForm]    = React.useState({ email: '', password: '' });
+  const [loading, setLoading] = React.useState(false);
+  const [error,   setError]   = React.useState('');
 
-  const [form, setForm] = React.useState({
-    email: "",
-    password: ""
-  });
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError('');
+    setLoading(true);
     try {
-
-      const response = await api.post('/login', form);
-
-      console.log(response.data);
-
-      alert("Login Success");
-
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user_name", response.data.user.name);
-
-      window.location.href = "/";
-
-    } catch (error) {
-      console.error(error);
-      alert("Login Failed");
+      const { data } = await api.post('/login', form);
+      localStorage.setItem('token',     data.token);
+      localStorage.setItem('user_name', data.user.name);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid email or password.');
+    } finally {
+      setLoading(false);
     }
-
   };
 
   return (
-    <div className="auth-container">
+    <>
 
-      <div className="auth-card">
 
-        <h2>Login</h2>
+      <div className="lp">
+        <span className="lp__orb lp__orb--1" />
+        <span className="lp__orb lp__orb--2" />
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <div className="lp__card">
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            required
-          />
+          <div className="lp__brand">
+            <span className="lp__brand-dot" />
+            <span className="lp__brand-name">StoreFront</span>
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            required
-          />
+          <h1 className="lp__title">Welcome back</h1>
+          <p className="lp__sub">Sign in to your account to continue</p>
 
-          <button type="submit" className="auth-button">
-            Login
-          </button>
+          {error && <div className="lp__error">{error}</div>}
 
-        </form>
+          <form onSubmit={handleSubmit} className="lp__form">
 
-        <p className="auth-footer">
-          Don't have an account? <a href="/register">Register here</a>
-        </p>
+            <div className="lp__field">
+              <label className="lp__label" htmlFor="email">Email</label>
+              <input
+                id="email" name="email" type="email"
+                className="lp__input" placeholder="you@example.com"
+                value={form.email} onChange={handleChange}
+                required autoComplete="email"
+              />
+            </div>
 
+            <div className="lp__field">
+              <div className="lp__label-row">
+                <label className="lp__label" htmlFor="password">Password</label>
+                <Link to="/forgot-password" className="lp__forgot">Forgot password?</Link>
+              </div>
+              <input
+                id="password" name="password" type="password"
+                className="lp__input" placeholder="••••••••"
+                value={form.password} onChange={handleChange}
+                required autoComplete="current-password"
+              />
+            </div>
+
+            <button type="submit" className="lp__submit" disabled={loading}>
+              {loading ? <span className="lp__spinner" /> : 'Sign In'}
+            </button>
+
+          </form>
+
+          <div className="lp__divider">
+            <span className="lp__divider-line" />
+            <span className="lp__divider-text">or</span>
+            <span className="lp__divider-line" />
+          </div>
+
+          <p className="lp__footer">
+            Don't have an account?{' '}
+            <Link to="/register" className="lp__footer-link">Register here</Link>
+          </p>
+
+        </div>
       </div>
-
-    </div>
+    </>
   );
-};
+}
 
-export default Login;

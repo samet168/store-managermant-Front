@@ -14,6 +14,12 @@ import Register from '../components/front/Register';
 import User from '../page/Dashboards/user';
 import LoginDS from '../components/dashboard/login';
 import ProductDetail from '../page/Front/ProductDetail ';
+import AddProduct from '../page/Dashboards/admin/AddProduct';
+import EditProduct from '../page/Dashboards/admin/EditProduct';
+import Products from '../page/Dashboards/admin/Products';
+import UserAdmin from '../page/Dashboards/admin/UserAdmin';
+import AddUser from '../page/Dashboards/admin/AddUser';
+import EditUser from '../page/Dashboards/admin/EditUser';
 const router = createBrowserRouter([
   {
     path: '/dashboard', 
@@ -25,12 +31,46 @@ const router = createBrowserRouter([
       },
       {
         path: 'admin', // no leading '/'
+        element: <Admin />,
+      },
+       {
+        path: 'admin/add-product',
+        element: <AddProduct />
+      },
+      {
+        path: 'admin/edit-product/:id',
+        element: <EditProduct />
+      },
+      {
+        path: 'admin/products',
+        element: <Products />
+      },
+      {
+        path: 'admin/create-user',
         element: <Admin />
       },
+      //
       {
         path: 'user',
         element: <User />
       },
+      {
+        path: 'admin/users',
+        element: <UserAdmin />
+      },
+      {
+        path: 'admin/users/add-user',
+        element: <AddUser />
+      },
+      {
+        path: 'admin/edit-user/:id',
+        element: <EditUser />
+      },
+      {
+        path: 'admin/delete-user/:id',
+        element: <Admin />
+      },
+
       {
         path: 'customer',
         element: <Customer />

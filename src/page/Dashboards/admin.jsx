@@ -1,7 +1,58 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../style/admin.css';
 
-const admin = () => {
+const Admin = () => {
+
+  const navigate = useNavigate();
+
+  // Product Functions
+  const handleAddProduct = () => {
+    navigate('/dashboard/admin/add-product');
+  };
+
+  const handleEditProduct = () => {
+    navigate('/dashboard/admin/edit-product');
+  };
+
+  const handleDeleteProduct = () => {
+    navigate('/dashboard/admin/delete-product');
+  };
+
+  const handleViewProducts = () => {
+    navigate('/dashboard/admin/products');
+  };
+
+  // User Functions
+  const handleCreateUser = () => {
+    navigate('/dashboard/admin/create-user');
+  };
+
+  const handleEditUser = () => {
+    navigate('/dashboard/admin/edit-user');
+  };
+
+  const handleDeleteUser = () => {
+    navigate('/dashboard/admin/delete-user');
+  };
+
+  const handleAssignRoles = () => {
+    navigate('/dashboard/admin/roles');
+  };
+
+  // Reports
+  const handleSalesReport = () => {
+    navigate('/dashboard/admin/report/sales');
+  };
+
+  const handleStockReport = () => {
+    navigate('/dashboard/admin/report/stock');
+  };
+
+  const handlePurchaseReport = () => {
+    navigate('/dashboard/admin/report/purchase');
+  };
+
   return (
     <div className="admin-page">
       <h1 className="page-title">Admin Dashboard</h1>
@@ -30,10 +81,10 @@ const admin = () => {
       <div className="admin-section">
         <h2>Manage Products</h2>
         <div className="action-buttons">
-          <button className="btn-add">Add Product</button>
-          <button className="btn-edit">Edit Product</button>
-          <button className="btn-delete">Delete Product</button>
-          <button className="btn-view">View Products</button>
+          <button className="btn-add" onClick={handleAddProduct}>Add Product</button>
+          <button className="btn-edit" onClick={handleEditProduct}>Edit Product</button>
+          <button className="btn-delete" onClick={handleDeleteProduct}>Delete Product</button>
+          <button className="btn-view" onClick={handleViewProducts}>View Products</button>
         </div>
       </div>
 
@@ -41,10 +92,10 @@ const admin = () => {
       <div className="admin-section">
         <h2>Manage Users</h2>
         <div className="action-buttons">
-          <button className="btn-add">Create User</button>
-          <button className="btn-edit">Edit User</button>
-          <button className="btn-delete">Delete User</button>
-          <button className="btn-view">Assign Roles</button>
+          <button className="btn-add" onClick={handleCreateUser}>Create User</button>
+          <button className="btn-edit" onClick={handleEditUser}>Edit User</button>
+          <button className="btn-delete" onClick={handleDeleteUser}>Delete User</button>
+          <button className="btn-view" onClick={handleAssignRoles}>Assign Roles</button>
         </div>
       </div>
 
@@ -52,9 +103,9 @@ const admin = () => {
       <div className="admin-section">
         <h2>Reports</h2>
         <div className="report-cards">
-          <div className="card report-card">Sales Report</div>
-          <div className="card report-card">Stock Report</div>
-          <div className="card report-card">Purchase Report</div>
+          <div className="card report-card" onClick={handleSalesReport}>Sales Report</div>
+          <div className="card report-card" onClick={handleStockReport}>Stock Report</div>
+          <div className="card report-card" onClick={handlePurchaseReport}>Purchase Report</div>
         </div>
       </div>
 
@@ -69,4 +120,4 @@ const admin = () => {
   );
 };
 
-export default admin;
+export default Admin;

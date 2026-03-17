@@ -1,117 +1,175 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../../style/Front/GlobalFront.css';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import api from '../../services/api';
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(null);
 
-  // Check if user is logged in
+const NAV_LINKS = [
+  { to: '/',         label: 'Home'     },
+  { to: '/products', label: 'Products' },
+  { to: '/about',    label: 'About'    },
+  { to: '/contact',  label: 'Contact'  },
+];
+
+export default function Navbar() {
+  const [isOpen,   setIsOpen]   = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [user,     setUser]     = useState(null);
+  const location = useLocation();
+  const menuRef  = useRef(null);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userName = localStorage.getItem("user_name");
-    console.log(userName);
-    
-    if (token) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUser({ name: userName  });
-    }
+    const token    = localStorage.getItem('token');
+    const userName = localStorage.getItem('user_name');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (token && userName) setUser({ name: userName });
   }, []);
 
-  // Logout function
-const handleLogout = async () => {
-  try {
-    // Get token from localStorage
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('No token found');
-      return;
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setIsOpen(false), [location]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setIsOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [isOpen]);
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      await api.post('/logout', {}, { headers: { Authorization: `Bearer ${token}` } });
+      localStorage.removeItem('token');
+      localStorage.removeItem('user_name');
+      setUser(null);
+      setIsOpen(false);
+    } catch (err) {
+      console.error('Logout failed:', err.response?.data || err.message);
     }
+  };
 
-    // Call Laravel logout API with Authorization header
-    await api.post(
-      '/logout',
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // send token to backend
-        },
-      }
-    );
-
-    // Remove token and user info
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_name');
-
-    // Update Navbar state
-    setUser(null);
-    alert('Logout successful');
-  } catch (error) {
-    console.error('Logout failed:', error.response?.data || error.message);
-    alert('Logout failed');
-  }
-};
+  const isActive = (path) =>
+    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
   return (
-    <nav className="navbar">
-      {/* Logo */}
-      <div className="logo">StoreFront</div>
+    <>
+      
 
-      {/* Desktop Menu */}
-      <ul className="nav-links">
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/products">Products</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
-      </ul>
+      <nav className={`nb ${scrolled ? 'nb--scrolled' : ''}`} ref={menuRef}>
 
-      {/* Desktop CTA */}
-      <div className="cta-buttons">
-        {user ? (
-          <>
-            <span className="user-name">Hi, {user.name}</span>
-            <button className="logout-btn" onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login"><button className="login-btn">Login</button></Link>
-            <Link to="/register"><button className="register-btn">Register</button></Link>
-          </>
-        )}
-      </div>
+        {/* top gradient accent line */}
+        <div className="nb__topline" />
 
-      {/* Mobile Hamburger */}
-      <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-      </div>
+        <div className="nb__inner">
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <ul className="mobile-menu">
-          <li><Link to="/" onClick={() => setIsOpen(false)}>Home</Link></li>
-          <li><Link to="/products" onClick={() => setIsOpen(false)}>Products</Link></li>
-          <li><Link to="/about" onClick={() => setIsOpen(false)}>About</Link></li>
-          <li><Link to="/contact" onClick={() => setIsOpen(false)}>Contact</Link></li>
+          {/* Logo */}
+          <Link to="/" className="nb__logo">
+            <div className="nb__logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+            </div>
+            StoreFront
+          </Link>
 
-          <li className="mobile-cta">
+          {/* Desktop links */}
+          <ul className="nb__links">
+            {NAV_LINKS.map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  className={`nb__link ${isActive(to) ? 'nb__link--active' : ''}`}
+                >
+                  {label}
+                  {isActive(to) && <span className="nb__link-bar" />}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="nb__sep" />
+
+          {/* Desktop auth */}
+          <div className="nb__auth">
             {user ? (
               <>
-                <span className="user-name">Hi, {user.name}</span>
-                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                <div className="nb__user">
+                  <div className="nb__avatar">{user.name.charAt(0).toUpperCase()}</div>
+                  <span className="nb__uname">Hi, {user.name}</span>
+                </div>
+                <button className="nb__btn nb__btn--danger" onClick={handleLogout}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+                  </svg>
+                  Logout
+                </button>
               </>
             ) : (
               <>
-                <Link to="/login"><button className="login-btn">Login</button></Link>
-                <Link to="/register"><button className="register-btn">Register</button></Link>
+                <Link to="/login"    className="nb__btn nb__btn--ghost">Login</Link>
+                <Link to="/register" className="nb__btn nb__btn--fill">Register</Link>
               </>
             )}
-          </li>
-        </ul>
-      )}
-    </nav>
-  );
-};
+          </div>
 
-export default Navbar;
+          {/* Hamburger */}
+          <button
+            className={`nb__ham ${isOpen ? 'nb__ham--open' : ''}`}
+            onClick={() => setIsOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            <span /><span /><span />
+          </button>
+        </div>
+
+        {/* Mobile drawer */}
+        <div className={`nb__drawer ${isOpen ? 'nb__drawer--open' : ''}`}>
+          <ul className="nb__drawer-links">
+            {NAV_LINKS.map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  className={`nb__drawer-link ${isActive(to) ? 'nb__drawer-link--active' : ''}`}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="nb__drawer-foot">
+            {user ? (
+              <>
+                <div className="nb__drawer-user">
+                  <div className="nb__avatar">{user.name.charAt(0).toUpperCase()}</div>
+                  <span className="nb__uname">{user.name}</span>
+                </div>
+                <button className="nb__btn nb__btn--danger" style={{width:'100%',justifyContent:'center'}} onClick={handleLogout}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+                  </svg>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login"    className="nb__btn nb__btn--ghost" style={{width:'100%',justifyContent:'center'}}>Login</Link>
+                <Link to="/register" className="nb__btn nb__btn--fill"  style={{width:'100%',justifyContent:'center',marginTop:'8px'}}>Register</Link>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+}
+
+/* ─── Styles ─────────────────────────────────────────────────── */
