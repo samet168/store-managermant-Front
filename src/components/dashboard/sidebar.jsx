@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import '../../style/GlobalDashboard.css';
+
 
 const Sidebar = () => {
 
@@ -71,15 +71,6 @@ const Sidebar = () => {
             <NavLink to="/dashboard/admin/suppliers">
               suppliers
             </NavLink>
-
-            <NavLink to="/dashboard/admin/suppliers">
-              suppliers
-            </NavLink>
-
-            <NavLink to="/dashboard/admin/suppliers">
-              suppliers
-            </NavLink>
-
             <NavLink to="/dashboard/admin/orders">
               orders
             </NavLink>

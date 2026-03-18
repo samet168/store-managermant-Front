@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../../services/api";
-import "./style/User.css";
+import "./style/addUser.css";
 
 export default function EditUser() {
   const { id } = useParams();

@@ -1,4 +1,4 @@
-import '../../style/GlobalDashboard.css';
+// import '../../style/GlobalDashboard.css';
 
 const Footer = () => {
     return (

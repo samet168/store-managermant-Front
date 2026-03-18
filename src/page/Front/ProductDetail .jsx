@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api";
-import '../../style/Front/ProductDetail.css';
+import '../../assets/style//Front/ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();

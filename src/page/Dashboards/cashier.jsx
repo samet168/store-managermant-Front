@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../style/cashier.css';
+import '../../assets/style/Dashboard/cashier.css';
 
 const cashier = () => {
   return (

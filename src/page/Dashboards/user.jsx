@@ -1,39 +1,147 @@
-import React from 'react';
-import "../../style/user.css";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // <-- Import useNavigate
+import api from "../../services/api";
+import "../../assets/style/Dashboard/user.css";
 
 const User = () => {
-  // Example user data
-  const userData = {
-    name: "John Doe",
-    role: "Customer",
-    email: "john.doe@example.com",
-    joined: "2023-05-12",
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+
+  const navigate = useNavigate(); // <-- Initialize navigate
+
+  // Fetch users
+// Example: fetchUsers with token
+const fetchUsers = async (page = 1, searchTerm = "") => {
+  try {
+    const token = localStorage.getItem("token"); // ឬ wherever you store the user token
+
+    const res = await api.get("/admin/users", {
+      params: { page, search: searchTerm },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setUsers(res.data.data);
+    setCurrentPage(res.data.current_page);
+    setLastPage(res.data.last_page);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchUsers();
+  }, []);
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    fetchUsers(1, value);
+  };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= lastPage) {
+      fetchUsers(page, search);
+    }
+  };
+
+  // Delete user
+const handleDelete = async (id) => {
+  const confirm = window.confirm("Are you sure to delete this user?");
+  if (!confirm) return;
+
+  try {
+    const token = localStorage.getItem("token");
+
+    await api.delete(`/admin/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    fetchUsers(currentPage, search); // refresh list
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+  // Edit user (React Router)
+  const handleEdit = (id) => {
+    navigate(`/dashboard/admin/users/edit/${id}`); // <-- React Router redirect
+  };
+
+  // Add user (React Router)
+  const handleAdd = () => {
+    navigate("/dashboard/admin/users/add-user"); // <-- React Router redirect
   };
 
   return (
     <div className="main-content">
-      <h1 className="page-title">User Profile</h1>
+      <h1 className="page-title">User Management</h1>
 
-      <div className="user-card">
-        <div className="user-avatar">
-          <img src="/images/avatar.png" alt="User Avatar" />
-        </div>
-        <div className="user-info">
-          <h2>{userData.name}</h2>
-          <p><strong>Role:</strong> {userData.role}</p>
-          <p><strong>Email:</strong> {userData.email}</p>
-          <p><strong>Joined:</strong> {userData.joined}</p>
-          <button className="btn-primary">Edit Profile</button>
-        </div>
+      {/* Add User Button */}
+      <button className="btn-add" onClick={handleAdd}>
+        Add User
+      </button>
+
+      {/* Search */}
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search user..."
+          value={search}
+          onChange={handleSearch}
+        />
       </div>
 
-      <div className="user-activity">
-        <h3>Recent Activity</h3>
-        <ul>
-          <li>Purchased "Laptop X168A"</li>
-          <li>Updated account settings</li>
-          <li>Logged in from new device</li>
-        </ul>
+      {/* User List */}
+      <div className="user-list">
+        {users.map((user) => (
+          <div className="user-card" key={user.id}>
+            <div className="user-avatar">
+              <img src={user.image} alt="avatar" />
+            </div>
+
+            <div className="user-info">
+              <h2>{user.name}</h2>
+              <p>{user.email}</p>
+              <span className="role">{user.role}</span>
+              <p className="date">{user.created_at?.split("T")[0]}</p>
+
+              <div className="btn-group">
+                <button className="btn edit-btn" onClick={() => handleEdit(user.id)}>
+                  Edit
+                </button>
+                <button className="btn delete-btn" onClick={() => handleDelete(user.id)}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <span>
+          {currentPage} / {lastPage}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === lastPage}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../style/Front/GlobalFront.css';
+import '../../assets/style/GlobalFront.css';
 const Footer = () => {
   return (
     <footer className="bg-gray-100 text-center p-4 mt-auto shadow-inner">

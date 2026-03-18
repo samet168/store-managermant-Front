@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import "../../style/Login.css"
+import "../../assets/style/GlobalDashboard.css";
 export default function Login() {
   const navigate = useNavigate();
 

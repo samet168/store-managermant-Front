@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../style/customer.css';
+import '../../assets/style/Dashboard/customer.css';
 
 const customer = () => {
   return (

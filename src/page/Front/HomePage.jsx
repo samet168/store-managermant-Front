@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import '../../style/Front/HomePage.css';
+import '../../assets/style/Front/HomePage.css';
 
 /* ─── Static data ─────────────────────────────────────────────── */
 const BENEFITS = [
