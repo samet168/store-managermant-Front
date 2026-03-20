@@ -32,6 +32,9 @@ import EditCategory from "../page/Dashboards/admin/EditCategory";
 import AddSupplier from "../page/Dashboards/admin/AddSupplier";
 import EditSupplier from "../page/Dashboards/admin/EditSupplier";
 import Orders from "../page/Dashboards/Orders";
+import AddOrders from "../page/Dashboards/admin/AddOrders";
+import EditOrders from "../page/Dashboards/admin/EditOrders";
+import ShowOrder from "../page/Dashboards/admin/ShowOrder";
 
 const router = createBrowserRouter([
   // ================= DASHBOARD =================
@@ -86,16 +89,16 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/orders/add-order",
-        element: <Orders />,
+        element: <AddOrders />,
       }
       ,
       {
         path: "admin/orders/edit/:id",
-        element: <Orders />,
+        element: <EditOrders />,
       },
       {
         path: "admin/orders/show/:id",
-        element: <Orders />,
+        element: <ShowOrder />,
       },
 
 
