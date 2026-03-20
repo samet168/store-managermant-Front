@@ -35,6 +35,9 @@ import Orders from "../page/Dashboards/Orders";
 import AddOrders from "../page/Dashboards/admin/AddOrders";
 import EditOrders from "../page/Dashboards/admin/EditOrders";
 import ShowOrder from "../page/Dashboards/admin/ShowOrder";
+import StockLogs from "../page/Dashboards/stockLogs";
+import AddStock from "../page/Dashboards/admin/AddStock";
+import EditStock from "../page/Dashboards/admin/EditStock";
 
 const router = createBrowserRouter([
   // ================= DASHBOARD =================
@@ -59,7 +62,7 @@ const router = createBrowserRouter([
       // 🔥 CATEGORY (FIXED)
       {
         path: "admin/categories",
-        element: <Cashier />,
+        element: <CategoryAdmin />,
       },
       {
         path: "admin/categories/add",
@@ -99,6 +102,21 @@ const router = createBrowserRouter([
       {
         path: "admin/orders/show/:id",
         element: <ShowOrder />,
+      },
+      //stock
+      {
+        path: "admin/stock-logs",
+        element: <StockLogs />,
+
+      },
+      {
+        path: "admin/stock-logs/add",
+        element: <AddStock />,
+      }
+      ,
+      {
+        path: "admin/stock-logs/edit/:id",
+        element: <EditStock />,
       },
 
 
