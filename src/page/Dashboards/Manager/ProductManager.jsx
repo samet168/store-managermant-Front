@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../../services/api';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../../services/api";
 
 // ── Inject styles once ─────────────────────────────────────
 const CSS = `
@@ -339,42 +339,46 @@ const CSS = `
 `;
 
 function injectStyles() {
-  if (document.getElementById('prod-styles')) return;
-  const tag = document.createElement('style');
-  tag.id = 'prod-styles';
+  if (document.getElementById("prod-styles")) return;
+  const tag = document.createElement("style");
+  tag.id = "prod-styles";
   tag.textContent = CSS;
   document.head.appendChild(tag);
 }
 
 // ── Status helper ──────────────────────────────────────────
 function StatusBadge({ status }) {
-  const s = (status || '').toLowerCase();
-  const cls = s === 'active' ? 'active' : s === 'inactive' ? 'inactive' : 'pending';
+  const s = (status || "").toLowerCase();
+  const cls =
+    s === "active" ? "active" : s === "inactive" ? "inactive" : "pending";
   return (
     <span className={`prod-status ${cls}`}>
       <span className="prod-status-dot" />
-      {status || '—'}
+      {status || "—"}
     </span>
   );
 }
 
 // ── Component ──────────────────────────────────────────────
-const Products = () => {
+const ProductManager = () => {
   const navigate = useNavigate();
-  const [products, setProducts]     = useState([]);
+  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage]     = useState(1);
-  const [search, setSearch]         = useState('');
-  const [loading, setLoading]       = useState(false);
+  const [lastPage, setLastPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   // const token = localStorage.getItem('token');
-  
 
-  useEffect(() => { injectStyles(); }, []);
+  useEffect(() => {
+    injectStyles();
+  }, []);
 
-  const fetchProducts = async (page = 1, searchTerm = '') => {
+  const fetchProducts = async (page = 1, searchTerm = "") => {
     setLoading(true);
     try {
-      const res = await api.get(`admin/products/list?page=${page}&search=${searchTerm}`);
+      const res = await api.get(
+        `manager/products/list?page=${page}&search=${searchTerm}`,
+      );
       setProducts(res.data.data);
       setCurrentPage(res.data.current_page);
       setLastPage(res.data.last_page);
@@ -385,7 +389,9 @@ const Products = () => {
     }
   };
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -393,15 +399,16 @@ const Products = () => {
     fetchProducts(1, value);
   };
 
-  const handleNext = () => currentPage < lastPage && fetchProducts(currentPage + 1, search);
-  const handlePrev = () => currentPage > 1     && fetchProducts(currentPage - 1, search);
+  const handleNext = () =>
+    currentPage < lastPage && fetchProducts(currentPage + 1, search);
+  const handlePrev = () =>
+    currentPage > 1 && fetchProducts(currentPage - 1, search);
 
-  const handleAdd    = ()   => navigate('/dashboard/admin/products/add-product');
-  const handleEdit   = (id) => navigate(`/dashboard/admin/products/edit/${id}`);
+  const handleEdit = (id) => navigate(`/dashboard/manager/products/edit/${id}`);
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure to delete this product?')) return;
+    if (!window.confirm("Are you sure to delete this product?")) return;
     try {
-      await api.delete(`admin/products/${id}`);
+      await api.delete(`manager/products/${id}`);
       fetchProducts(currentPage, search);
     } catch (err) {
       console.error(err);
@@ -410,7 +417,6 @@ const Products = () => {
 
   return (
     <div className="prod-page">
-
       {/* Header */}
       <div className="prod-header">
         <h1 className="prod-title">Products</h1>
@@ -423,9 +429,14 @@ const Products = () => {
               value={search}
               onChange={handleSearch}
             />
-            <button className="prod-search-btn" onClick={() => fetchProducts(1, search)}>🔍</button>
+            <button
+              className="prod-search-btn"
+              onClick={() => fetchProducts(1, search)}
+            >
+              🔍
+            </button>
           </div>
-          <button className="prod-btn-add" onClick={handleAdd}>+ Add Product</button>
+
         </div>
       </div>
 
@@ -444,7 +455,11 @@ const Products = () => {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="6" className="prod-empty">Loading…</td></tr>
+              <tr>
+                <td colSpan="6" className="prod-empty">
+                  Loading…
+                </td>
+              </tr>
             ) : products.length === 0 ? (
               <tr>
                 <td colSpan="6">
@@ -459,21 +474,26 @@ const Products = () => {
                 <tr key={p.id}>
                   <td data-label="Product">
                     <div className="prod-name-cell">
-                      {p.image
-                        ? <img src={p.image} alt={p.name} className="prod-img" />
-                        : <div className="prod-img-ph">📦</div>
-                      }
+                      {p.image ? (
+                        <img src={p.image} alt={p.name} className="prod-img" />
+                      ) : (
+                        <div className="prod-img-ph">📦</div>
+                      )}
                       <span className="prod-name-text">{p.name}</span>
                     </div>
                   </td>
                   <td data-label="Category">
-                    <span className="prod-cat">{p.category?.name || '—'}</span>
+                    <span className="prod-cat">{p.category?.name || "—"}</span>
                   </td>
                   <td data-label="Price">
-                    <span className="prod-price">${Number(p.price).toLocaleString()}</span>
+                    <span className="prod-price">
+                      ${Number(p.price).toLocaleString()}
+                    </span>
                   </td>
                   <td data-label="Qty">
-                    <span className={`prod-qty${p.quantity < 10 ? ' low' : ''}`}>
+                    <span
+                      className={`prod-qty${p.quantity < 10 ? " low" : ""}`}
+                    >
                       {p.quantity}
                     </span>
                   </td>
@@ -482,8 +502,18 @@ const Products = () => {
                   </td>
                   <td data-label="Actions">
                     <div className="prod-actions">
-                      <button className="prod-btn-edit"   onClick={() => handleEdit(p.id)}>Edit</button>
-                      <button className="prod-btn-delete" onClick={() => handleDelete(p.id)}>Delete</button>
+                      <button
+                        className="prod-btn-edit"
+                        onClick={() => handleEdit(p.id)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="prod-btn-delete"
+                        onClick={() => handleDelete(p.id)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -494,18 +524,27 @@ const Products = () => {
 
         {/* Pagination */}
         <div className="prod-pagination">
-          <button className="prod-btn-page" onClick={handlePrev} disabled={currentPage === 1}>
+          <button
+            className="prod-btn-page"
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+          >
             ← Prev
           </button>
-          <span className="prod-page-info">Page {currentPage} of {lastPage}</span>
-          <button className="prod-btn-page" onClick={handleNext} disabled={currentPage === lastPage}>
+          <span className="prod-page-info">
+            Page {currentPage} of {lastPage}
+          </span>
+          <button
+            className="prod-btn-page"
+            onClick={handleNext}
+            disabled={currentPage === lastPage}
+          >
             Next →
           </button>
         </div>
       </div>
-
     </div>
   );
 };
 
-export default Products;
+export default ProductManager;

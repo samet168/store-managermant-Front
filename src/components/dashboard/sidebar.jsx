@@ -1,147 +1,4 @@
-// import React, { useState } from 'react';
-// import { NavLink, useLocation } from 'react-router-dom';
 
-
-// const Sidebar = () => {
-
-//   const [openAdmin, setOpenAdmin] = useState(false);
-//   const [openUser, setOpenUser] = useState(false);
-//   const [openCashier, setOpenCashier] = useState(false);
-//   const location = useLocation();
-
-//   // auto open when inside admin
-//   React.useEffect(() => {
-//     if (location.pathname.includes("/admin")) {
-//       setOpenAdmin(true);
-//     }
-
-    
-//   }, [location]);
-
-//   React.useEffect(() => {
-//     if (location.pathname.includes("/cashier")) {
-//       setOpenUser(true);
-//     }
-//   }, [location]);
-
-//   React.useEffect(() => {
-//     if (location.pathname.includes("/cashier")) {
-//       setOpenCashier(true);
-//     }
-//   }, [location]);
-
-//   return (
-//     <div className="sidebar d-flex flex-column">
-
-//       {/* Logo */}
-//       <div className="sidebar-header mb-4">
-//         <h2 className="text-white">MyApp</h2>
-//       </div>
-
-//       {/* Main Navigation */}
-//       <nav className="sidebar-nav flex-grow-1">
-
-//         <NavLink to="/dashboard" end className={({ isActive }) => isActive ? "active" : ""}>
-//           Dashboard
-//         </NavLink>
-
-//         {/* ADMIN DROPDOWN */}
-//         <div 
-//           className="sidebar-link"
-//           onClick={() => setOpenAdmin(!openAdmin)}
-//         >
-//           Admin ▾
-//         </div>
-
-//         {openAdmin && (
-//           <div className="submenu sidebar-nav flex-grow-1">
-
-//             <NavLink to="/dashboard/admin/products">
-//               Products
-//             </NavLink>
-
-//             <NavLink to="/dashboard/admin/users">
-//               User
-//             </NavLink>
-
-//             <NavLink to="/dashboard/admin/Categories">
-//               Categories
-//             </NavLink>
-
-//             <NavLink to="/dashboard/admin/suppliers">
-//               suppliers
-//             </NavLink>
-//             <NavLink to="/dashboard/admin/orders">
-//               orders
-//             </NavLink>
-
-//             <NavLink to="/dashboard/admin/stock-logs">
-//               stock-logs
-//             </NavLink>
-
-//           </div>
-//         )}
-
-//         {/* <NavLink to="/dashboard/user" className={({ isActive }) => isActive ? "active" : ""}>
-//           User
-//         </NavLink> */}
-
-//         {/* USER DROPDOWN */}
-//         <div 
-//           className="sidebar-link"
-//           onClick={() => setOpenUser(!openUser)}
-//         >
-//           charchri ▾
-//         </div>
-
-//         <NavLink to="/dashboard/customer" >
-//           Customers
-//         </NavLink>
-//         <NavLink to="/dashboard/employee" >
-//           Employee
-//         </NavLink>
-
-//         {/* <NavLink to="/dashboard/cashier" className={({ isActive }) => isActive ? "active" : ""}>
-//           Cashier
-//         </NavLink> */}
-
-//         <div 
-//           className="sidebar-link"
-//           onClick={() => setOpenCashier(!openCashier)}
-//         >
-//           Cashier ▾
-//         </div>
-//         {
-//           openCashier && (
-//             <div className="submenu sidebar-nav flex-grow-1">
-//               <NavLink to="/dashboard/cashier" className={({ isActive }) => isActive ? "active" : ""}>
-//                 Cashier
-//               </NavLink>
-//             </div>
-//           )
-//         }
-
-//         <NavLink to="/dashboard/supplier" className={({ isActive }) => isActive ? "active" : ""}>
-//           Supplier
-//         </NavLink>
-
-//         <NavLink to="/dashboard/manager" className={({ isActive }) => isActive ? "active" : ""}>
-//           Manager
-//         </NavLink>
-
-//       </nav>
-
-//       {/* Bottom */}
-//       <nav className="sidebar-nav">
-//         <NavLink to="/support">Support</NavLink>
-//         <NavLink to="/settings">Settings</NavLink>
-//       </nav>
-
-//     </div>
-//   );
-// };
-
-// export default Sidebar;
 
 
 
@@ -237,6 +94,14 @@ const ADMIN_ITEMS = [
 const CASHIER_ITEMS = [
   { to: '/dashboard/cashier', label: 'Cashier' },
 ];
+const MANAGER_ITEMS = [
+  { to: '/dashboard/manager', label: 'Manager' },
+  { to: '/dashboard/manager/products', label: 'Products' },
+  { to: '/dashboard/manager/stock', label: 'Stock' },
+  { to: '/dashboard/manager/orders', label: 'Orders' },
+  
+
+];
 
 /* ─── accordion group ───────────────────────────────────── */
 function AccordionGroup({ icon, label, items, open, onToggle }) {
@@ -275,12 +140,14 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const [openAdmin,   setOpenAdmin]   = useState(false);
   const [openCharchri, setOpenCharchri] = useState(false);
   const [openCashier, setOpenCashier] = useState(false);
+  const [openManager, setOpenManager] = useState(false);
 
   /* auto-open relevant group */
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (location.pathname.includes('/admin'))   setOpenAdmin(true);
     if (location.pathname.includes('/cashier')) setOpenCashier(true);
+    if (location.pathname.includes('/manager')) setOpenManager(true);
   }, [location.pathname]);
 
   const link = (to, icon, label, end = false) => (
@@ -331,6 +198,13 @@ export default function Sidebar({ mobileOpen, onClose }) {
             open={openAdmin}
             onToggle={() => setOpenAdmin(v => !v)}
           />
+          <AccordionGroup
+            icon={Icon.manager}
+            label="Manager"
+            items={MANAGER_ITEMS}
+            open={openManager}
+            onToggle={() => setOpenManager(v => !v)}
+          />
 
           <div
             className="sb-group-btn sb-group-btn--plain"
@@ -353,7 +227,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
           />
 
           {link('/dashboard/supplier', Icon.supplier, 'Supplier')}
-          {link('/dashboard/manager',  Icon.manager,  'Manager')}
+=
         </nav>
 
         <div className="sb-divider" />

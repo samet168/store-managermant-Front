@@ -1,33 +1,32 @@
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+// import { Navigate, Outlet } from "react-router-dom";
+// import { jwtDecode } from "jwt-decode";
 
-/**
- * ProtectedRoute
- * - ប្រសិនបើ token គ្មាន → redirect to /login
- * - ប្រសិនបើ role មិន match allowedRoles → redirect to /dashboard
- *
- * Usage:
- *   <ProtectedRoute allowedRoles={["admin"]}>
- *     <AdminPage />
- *   </ProtectedRoute>
- */
-const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const location = useLocation();
+// const ProtectedRoute = ({ allowedRoles }) => {
+//   const token = localStorage.getItem("token");
 
-  const token = localStorage.getItem("token");
-  const role  = localStorage.getItem("role") || "";
+//   if (!token) {
+//     return <Navigate to="/dashboard/login" />;
+//   }
 
-  // ── No token → go to login ─────────────────────────────
-  if (!token) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+//   try {
+//     const decoded = jwtDecode(token);
 
-  // ── Role not allowed → go to dashboard ────────────────
-  if (allowedRoles.length > 0 && !allowedRoles.includes(role)) {
-    return <Navigate to="/dashboard" replace />;
-  }
+//     const role = decoded?.role || decoded?.user?.role;
 
-  return children;
-};
+//     if (!role) {
+//       return <Navigate to="/dashboard/login" />;
+//     }
 
-export default ProtectedRoute;
+//     if (!allowedRoles.includes(role)) {
+        
+//       return <Navigate to="/dashboard/admin" />;
+//     }
+
+//     return <Outlet />;
+//   } catch (error) {
+//     console.error("Invalid token:", error);
+//     return <Navigate to="/login" />;
+//   }
+// };
+
+// export default ProtectedRoute;

@@ -35,6 +35,21 @@ import ShowOrder from "../page/Dashboards/admin/ShowOrder";
 import StockLogs from "../page/Dashboards/stockLogs";
 import AddStock from "../page/Dashboards/admin/AddStock";
 import EditStock from "../page/Dashboards/admin/EditStock";
+import LoginDbard from "../components/dashboard/login";
+
+
+//Manager
+import ProductsManger from "../page/Dashboards/Manager/ProductManager";
+import AddProductManager from "../page/Dashboards/Manager/CRUD/AddProductManager";
+import EditProductManager from "../page/Dashboards/Manager/CRUD/EditProduct";
+
+import StockLogManager from "../page/Dashboards/Manager/CRUD/stockLogs";
+import AddStockLogManager from "../page/Dashboards/Manager/CRUD/AddStock";
+import EditStockLogManager from "../page/Dashboards/Manager/CRUD/EditStock";
+
+import OrderManager from "../page/Dashboards/Manager/CRUD/Orders";
+import AddOrderManager from "../page/Dashboards/Manager/CRUD/AddOrders";
+import ShowOrderManager from "../page/Dashboards/Manager/CRUD/ShowOrder";
 
 // FRONT
 import HomePage from "../page/Front/HomePage";
@@ -102,11 +117,51 @@ const router = createBrowserRouter([
       { path: "admin/stock-logs/edit/:id", element: <EditStock /> },
 
       // OTHER ROLE
+
+      {
+        path: "/dashboard/manager",
+        element: <Manager />,
+      },
+      {
+        path: "/dashboard/manager/products",
+        element: <ProductsManger />,
+      },
+      {
+        path: "/dashboard/manager/products/edit/:id",
+        element: <EditProductManager />,
+      },
+      {
+        path: "/dashboard/manager/stock",
+        element: <StockLogManager />,
+      },
+      {
+        path:"/dashboard/manager/stock/add",
+        element: <AddStockLogManager />
+      },
+      {
+        path:"/dashboard/manager/stock/edit/:id",
+        element: <EditStockLogManager />
+      },
+      {
+        path:"/dashboard/manager/orders",
+        element: <OrderManager />
+      },
+      {
+        path:"/dashboard/manager/orders/add",
+        element: <AddOrderManager />
+      },
+      {
+        path:"/dashboard/manager/orders/show/:id",
+        element: <ShowOrderManager />
+      },
+
+
       { path: "user", element: <User /> },
       { path: "customer", element: <Customer /> },
       { path: "cashier", element: <Cashier /> },
       { path: "supplier", element: <Supplier /> },
-      { path: "manager", element: <Manager /> },
+      
+      { path: "login", element: <LoginDbard /> },
     ],
   },
 
