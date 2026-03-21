@@ -8,7 +8,7 @@ const RootFrontLayout = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <div className="main-content flex-grow-1 p-4">
-        <Outlet /> {/* Child routes render here */}
+        <Outlet /> 
       </div>
       <Footer />
     </div>

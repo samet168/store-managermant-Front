@@ -332,7 +332,7 @@ const StockLogs = () => {
                     <span className="sl-product">{log.product?.name || '—'}</span>
                   </td>
                   <td data-label="Quantity">
-                    <QtyBadge qty={log.quantity} />
+                    <QtyBadge qty={log.product.quantity} />
                   </td>
                   <td data-label="Date">
                     <span className="sl-date">
