@@ -95,7 +95,7 @@ const ADMIN_ITEMS = [
 //   { to: '/dashboard/cashier', label: 'Cashier' },
 // ];
 const MANAGER_ITEMS = [
-  { to: '/dashboard/manager', label: 'Manager' },
+
   { to: '/dashboard/manager/products', label: 'Products' },
   { to: '/dashboard/manager/stock', label: 'Stock' },
   { to: '/dashboard/manager/orders', label: 'Orders' },
@@ -103,11 +103,20 @@ const MANAGER_ITEMS = [
 
 ];
 const CASHIER_ITEMS = [
-  { to: '/dashboard/cashier', label: 'cashier' },
   { to: '/dashboard/cashier/products', label: 'Products' },
   { to: '/dashboard/cashier/orders', label: 'Orders' },
   { to: '/dashboard/cashier/customers', label: 'Customer' },
 ];
+
+const SUPPLIER_ITEMS = [
+  { to: '/dashboard/supplier/purchases', label: 'purchases' },
+];
+
+const CUSTOMER_ITEMS = [
+  { to: '/dashboard/customer/orders', label: 'Orders' },
+  { to: '/dashboard/customer/products', label: 'Products' },
+];
+
 /* ─── accordion group ───────────────────────────────────── */
 function AccordionGroup({ icon, label, items, open, onToggle }) {
   const contentRef = useRef(null);
@@ -143,9 +152,11 @@ function AccordionGroup({ icon, label, items, open, onToggle }) {
 export default function Sidebar({ mobileOpen, onClose }) {
   const location = useLocation();
   const [openAdmin,   setOpenAdmin]   = useState(false);
-  const [openCharchri, setOpenCharchri] = useState(false);
+
   const [openCashier, setOpenCashier] = useState(false);
   const [openManager, setOpenManager] = useState(false);
+  const [openSupplier, setOpenSupplier] = useState(false);
+  const [openCustomer, setOpenCustomer] = useState(false);
   
 
   /* auto-open relevant group */
@@ -154,6 +165,9 @@ export default function Sidebar({ mobileOpen, onClose }) {
     if (location.pathname.includes('/admin'))   setOpenAdmin(true);
     if (location.pathname.includes('/cashier')) setOpenCashier(true);
     if (location.pathname.includes('/manager')) setOpenManager(true);
+    if(location.pathname.includes('/supplier')) setOpenSupplier(true);
+    if(location.pathname.includes('/customer')) setOpenCustomer(true);
+
   }, [location.pathname]);
 
   const link = (to, icon, label, end = false) => (
@@ -219,31 +233,29 @@ export default function Sidebar({ mobileOpen, onClose }) {
             open={openCashier}
             onToggle={() => setOpenCashier(v => !v)}
           />
-
-
-
-          <div
-            className="sb-group-btn sb-group-btn--plain"
-            onClick={() => setOpenCharchri(v => !v)}
-          >
-            <span className="sb-icon">{Icon.users}</span>
-            <span className="sb-label">Charchri</span>
-            <span className={`sb-chevron${openCharchri ? ' sb-chevron--open' : ''}`}>{Icon.chevron}</span>
-          </div>
-
-          {link('/dashboard/customer',  Icon.customer,  'Customers')}
-          {link('/dashboard/employee',  Icon.employee,  'Employee')}
-
           <AccordionGroup
-            icon={Icon.cashier}
-            label="Cashier"
-            items={CASHIER_ITEMS}
-            open={openCashier}
-            onToggle={() => setOpenCashier(v => !v)}
+            icon={Icon.supplier}
+            label="Supplier"
+            items={SUPPLIER_ITEMS}
+            open={openSupplier}
+            onToggle={() => setOpenSupplier(v => !v)}
           />
 
-          {link('/dashboard/supplier', Icon.supplier, 'Supplier')}
-=
+          <AccordionGroup
+            icon={Icon.customer}
+            label="Customer"
+            items={CUSTOMER_ITEMS}
+            open={openCustomer}
+            onToggle={() => setOpenCustomer(v => !v)}
+          />
+
+
+
+
+
+
+
+
         </nav>
 
         <div className="sb-divider" />

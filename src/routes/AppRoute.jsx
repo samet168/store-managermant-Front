@@ -35,7 +35,7 @@ import ShowOrder from "../page/Dashboards/admin/ShowOrder";
 import StockLogs from "../page/Dashboards/stockLogs";
 import AddStock from "../page/Dashboards/admin/AddStock";
 import EditStock from "../page/Dashboards/admin/EditStock";
-import LoginDbard from "../components/dashboard/login";
+import LoginDbard from "../components/dashboard/Login";
 
 
 //Manager
@@ -59,6 +59,21 @@ import CustomersCashier from "../page/Dashboards/Cashier/user";
 import AddOrdersCashier from "../page/Dashboards/Cashier/CRUD/AddOrders";
 import ShowOrderCashier from "../page/Dashboards/Cashier/CRUD/ShowOrder";
 import AddCustomerCashier from "../page/Dashboards/Cashier/CRUD/AddUser";
+
+
+//
+import PurchaseList from "../page/Dashboards/supplier/PurchaseList";
+import AddPurchase from "../page/Dashboards/supplier/CRUD/AddPurchase";
+import EditPurchases from "../page/Dashboards/supplier/CRUD/EditPurchases";
+
+
+import CustomerProductList from "../page/Dashboards/Customer/CustomerProductList";
+import CustomerOrderList from "../page/Dashboards/Customer/Orders";
+import EditProductCustomer from "../page/Dashboards/Customer/CRUD/EditOrders";
+import AddOrderCustomer from "../page/Dashboards/Customer/CRUD/AddOrders";
+import ShowOrderCustomer from "../page/Dashboards/Customer/CRUD/ShowOrder";
+import EditOrderCustomer from "../page/Dashboards/Customer/CRUD/EditOrders";
+
 // FRONT
 import HomePage from "../page/Front/HomePage";
 // import ProductDetail from "../page/Front/ProductDetail";
@@ -71,6 +86,8 @@ import Checkout from "../page/Front/Checkout";
 import Cart from "../page/Front/Cart";
 import ProductsF from "../page/Front/Products";
 import About from "../page/Front/About";
+
+
 
 const router = createBrowserRouter([
   // ================= AUTH =================
@@ -192,10 +209,30 @@ const router = createBrowserRouter([
         path: "/dashboard/cashier/customers/add",
         element: <AddCustomerCashier />,
       },
-      // {
-      //   path: "/dashboard/cashier/customers/add",
-      //   element: <AddCustomer />,
-      // },
+ //=========================
+      {
+        path: "/dashboard/supplier/purchases",
+        element: <PurchaseList />,
+      },
+      {
+        path: "/dashboard/supplier/purchases/add",
+        element: <AddPurchase />,
+      },{
+        path: "/dashboard/supplier/purchases/edit/:id",
+        element: <EditPurchases />,
+      },
+
+      //
+      { path: '/dashboard/customer/products',       element: <CustomerProductList /> },
+      { path: '/dashboard/customer/products/edit/:id',   element: <EditProductCustomer /> },
+      { path: '/dashboard/customer/orders',element: <CustomerOrderList /> },
+      { path: '/dashboard/customer/orders/add',element: <AddOrderCustomer /> },
+      { path: '/dashboard/customer/orders/show/:id',element: <ShowOrderCustomer /> },
+      { path: '/dashboard/customer/orders/edit/:id',element: <EditOrderCustomer /> },
+
+
+      
+
 
 
 

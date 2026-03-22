@@ -360,7 +360,7 @@ function StatusBadge({ status }) {
 }
 
 // ── Component ──────────────────────────────────────────────
-const Products = () => {
+const CustomerProductList = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -377,7 +377,7 @@ const Products = () => {
     setLoading(true);
     try {
       const res = await api.get(
-        `admin/products/list?page=${page}&search=${searchTerm}`,
+        `customer/products/list?page=${page}&search=${searchTerm}`,
       );
       setProducts(res.data.data);
       setCurrentPage(res.data.current_page);
@@ -404,12 +404,12 @@ const Products = () => {
   const handlePrev = () =>
     currentPage > 1 && fetchProducts(currentPage - 1, search);
 
-  const handleAdd = () => navigate("/dashboard/admin/products/add-product");
-  const handleEdit = (id) => navigate(`/dashboard/admin/products/edit/${id}`);
+  const handleAdd = () => navigate("/dashboard/customer/products/add");
+  const handleEdit = (id) => navigate(`/dashboard/customer/products/edit/${id}`);
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure to delete this product?")) return;
     try {
-      await api.delete(`admin/products/${id}`);
+      await api.delete(`customer/products/${id}`);
       fetchProducts(currentPage, search);
     } catch (err) {
       console.error(err);
@@ -550,4 +550,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default CustomerProductList;
