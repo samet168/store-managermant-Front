@@ -91,9 +91,9 @@ const ADMIN_ITEMS = [
   { to: '/dashboard/admin/stock-logs', label: 'Stock Logs' },
 ];
 
-const CASHIER_ITEMS = [
-  { to: '/dashboard/cashier', label: 'Cashier' },
-];
+// const CASHIER_ITEMS = [
+//   { to: '/dashboard/cashier', label: 'Cashier' },
+// ];
 const MANAGER_ITEMS = [
   { to: '/dashboard/manager', label: 'Manager' },
   { to: '/dashboard/manager/products', label: 'Products' },
@@ -102,7 +102,12 @@ const MANAGER_ITEMS = [
   
 
 ];
-
+const CASHIER_ITEMS = [
+  { to: '/dashboard/cashier', label: 'cashier' },
+  { to: '/dashboard/cashier/products', label: 'Products' },
+  { to: '/dashboard/cashier/orders', label: 'Orders' },
+  { to: '/dashboard/cashier/customers', label: 'Customer' },
+];
 /* ─── accordion group ───────────────────────────────────── */
 function AccordionGroup({ icon, label, items, open, onToggle }) {
   const contentRef = useRef(null);
@@ -141,6 +146,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const [openCharchri, setOpenCharchri] = useState(false);
   const [openCashier, setOpenCashier] = useState(false);
   const [openManager, setOpenManager] = useState(false);
+  
 
   /* auto-open relevant group */
   useEffect(() => {
@@ -198,6 +204,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
             open={openAdmin}
             onToggle={() => setOpenAdmin(v => !v)}
           />
+
           <AccordionGroup
             icon={Icon.manager}
             label="Manager"
@@ -205,6 +212,15 @@ export default function Sidebar({ mobileOpen, onClose }) {
             open={openManager}
             onToggle={() => setOpenManager(v => !v)}
           />
+          <AccordionGroup
+            icon={Icon.cashier}
+            label="Cashier"
+            items={CASHIER_ITEMS}
+            open={openCashier}
+            onToggle={() => setOpenCashier(v => !v)}
+          />
+
+
 
           <div
             className="sb-group-btn sb-group-btn--plain"

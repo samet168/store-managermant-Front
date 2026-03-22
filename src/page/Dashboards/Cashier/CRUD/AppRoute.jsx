@@ -51,14 +51,6 @@ import OrderManager from "../page/Dashboards/Manager/CRUD/Orders";
 import AddOrderManager from "../page/Dashboards/Manager/CRUD/AddOrders";
 import ShowOrderManager from "../page/Dashboards/Manager/CRUD/ShowOrder";
 
-
-//
-import ProductsCashier from "../page/Dashboards/Cashier/Products";
-import OrdersCashier from "../page/Dashboards/Cashier/Orders";
-import CustomersCashier from "../page/Dashboards/Cashier/user";
-import AddOrdersCashier from "../page/Dashboards/Cashier/CRUD/AddOrders";
-import ShowOrderCashier from "../page/Dashboards/Cashier/CRUD/ShowOrder";
-import AddCustomerCashier from "../page/Dashboards/Cashier/CRUD/AddUser";
 // FRONT
 import HomePage from "../page/Front/HomePage";
 // import ProductDetail from "../page/Front/ProductDetail";
@@ -124,7 +116,7 @@ const router = createBrowserRouter([
       { path: "admin/stock-logs/add", element: <AddStock /> },
       { path: "admin/stock-logs/edit/:id", element: <EditStock /> },
 
-      // Manager
+      // OTHER ROLE
 
       {
         path: "/dashboard/manager",
@@ -162,42 +154,6 @@ const router = createBrowserRouter([
         path:"/dashboard/manager/orders/show/:id",
         element: <ShowOrderManager />
       },
-
-      // Cashier
-      {
-        path: "/dashboard/cashier",
-        element: <Cashier />,
-      },
-      {
-        path: "/dashboard/cashier/products",
-        element: <ProductsCashier />,
-      },
-      {
-        path: "/dashboard/cashier/orders",
-        element: <OrdersCashier />,
-      },
-      {
-        path: "/dashboard/cashier/orders/add",
-        element: <AddOrdersCashier />,
-      },
-      {
-        path: "/dashboard/cashier/orders/show/:id",
-        element: <ShowOrderCashier />,
-      },
-      {
-        path: "/dashboard/cashier/customers",
-        element: <CustomersCashier />,
-      },
-      {
-        path: "/dashboard/cashier/customers/add",
-        element: <AddCustomerCashier />,
-      },
-      // {
-      //   path: "/dashboard/cashier/customers/add",
-      //   element: <AddCustomer />,
-      // },
-
-
 
 
       { path: "user", element: <User /> },

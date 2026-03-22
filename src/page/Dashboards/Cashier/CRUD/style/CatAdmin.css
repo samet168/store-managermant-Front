@@ -1,0 +1,171 @@
+/* ============================================================
+   Category.css — Bootstrap complement only
+   ============================================================ */
+
+/* ── Page animation ── */
+.cat-page {
+  animation: catFadeUp 0.3s ease both;
+}
+
+@keyframes catFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header card ── */
+.cat-header-card {
+  border-left: 4px solid #0d6efd !important;
+  border-radius: 12px !important;
+}
+
+/* ── Search group ── */
+.cat-search-group .form-control,
+.cat-search-group .input-group-text {
+  border-color: #dee2e6;
+}
+.cat-search-group .input-group-text {
+  border-right: none;
+  border-radius: 8px 0 0 8px !important;
+}
+.cat-search-group .form-control {
+  border-left: none;
+  border-radius: 0 8px 8px 0 !important;
+}
+.cat-search-group .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+  border-color: #86b7fe;
+}
+
+/* ── Per-page select ── */
+.cat-per-page {
+  border-radius: 8px !important;
+  font-size: 0.82rem;
+  border-color: #dee2e6;
+}
+
+/* ── Add button ── */
+.cat-btn-add {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.25) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  white-space: nowrap;
+}
+.cat-btn-add:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 14px rgba(13, 110, 253, 0.35) !important;
+}
+
+/* ── Table ── */
+.cat-table thead {
+  background: linear-gradient(135deg, #1a3c8f 0%, #0d6efd 100%);
+}
+.cat-table thead th {
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+  border: none;
+}
+.cat-table tbody tr {
+  transition: background 0.12s ease;
+}
+.cat-table tbody tr:hover {
+  background-color: #f0f6ff;
+}
+.cat-table tbody td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+.cat-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Monospace text ── */
+.cat-mono {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* ── Category avatar ── */
+.cat-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cat-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Avatar placeholder (letter) */
+.cat-avatar-ph {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── Action buttons ── */
+.cat-act-btn {
+  border-radius: 6px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  padding: 0.3rem 0.7rem !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+.cat-act-btn.btn-outline-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(13, 110, 253, 0.28) !important;
+}
+.cat-act-btn.btn-outline-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(220, 53, 69, 0.28) !important;
+}
+
+/* ── Pagination ── */
+.cat-page-link {
+  border-radius: 6px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  min-width: 34px;
+  text-align: center;
+  transition: all 0.15s ease !important;
+}
+.page-item.active .cat-page-link {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3) !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 575.98px) {
+  .cat-header-card .card-body {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  .cat-btn-add {
+    width: 100%;
+    justify-content: center;
+  }
+  .cat-avatar,
+  .cat-avatar-ph {
+    width: 34px;
+    height: 34px;
+    font-size: 0.875rem;
+  }
+}

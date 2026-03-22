@@ -1,0 +1,99 @@
+.add-product-container{
+    padding:30px;
+    display:flex;
+    justify-content:center;
+    /* background:#f5f7fb; */
+    min-height:100vh;
+}
+
+/* .form-card{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    width:450px;
+} */
+
+.form-title{
+    margin-bottom:25px;
+    color:#1e293b;
+    text-align:center;
+}
+
+.product-form .form-group{
+    margin-bottom:15px;
+    display:flex;
+    flex-direction:column;
+}
+
+.product-form label{
+    margin-bottom:6px;
+    font-weight:500;
+    color:#334155;
+}
+
+.product-form input,
+.product-form select,
+.product-form textarea{
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #cbd5e1;
+    font-size:14px;
+}
+
+.product-form textarea{
+    resize:none;
+    min-height:80px;
+}
+
+.save-btn{
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+    background:#4CAF50;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.save-btn:hover{
+    background:#43a047;
+}
+
+.form-actions{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+}
+
+/* X BUTTON */
+.close-x{
+    position:absolute;
+    top:15px;
+    right:15px;
+    background:transparent;
+    border:none;
+    font-size:24px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#f44336;
+    transition:0.3s;
+}
+
+.close-x:hover{
+    color:#d32f2f;
+}
+
+/* FORM CARD POSITION RELATIVE */
+.form-card{
+    position:relative; /* important for X button positioning */
+    background:white;
+    padding:35px 40px;
+    border-radius:15px;
+    box-shadow:0 15px 30px rgba(0,0,0,0.1);
+    width:480px;
+    transition:0.3s;
+}
