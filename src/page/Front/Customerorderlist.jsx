@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import '../../assets/style/Front/HomePage.css';
 
-/* ─── localStorage cart helpers ──────────────────────── */
+/* ─── Cart helpers (localStorage) ─────────────────────── */
 function getCart() {
   try { return JSON.parse(localStorage.getItem('cart') || '[]'); }
   catch { return []; }
 }
 function saveCart(cart) {
   localStorage.setItem('cart', JSON.stringify(cart));
-  // notify Navbar (same tab)
+  // notify same-tab listeners (Navbar polling)
   window.dispatchEvent(new Event('storage'));
 }
 
@@ -46,133 +46,145 @@ const BENEFITS = [
   },
 ];
 
-/* ─── Cart Drawer CSS ──────────────────────────────────── */
+/* ─── Extra CSS for cart drawer ───────────────────────── */
 const CART_CSS = `
-.hp-cart-overlay {
+.cart-overlay {
   position: fixed; inset: 0; z-index: 999;
-  background: rgba(0,0,0,.45); backdrop-filter: blur(3px);
-  opacity: 0; pointer-events: none; transition: opacity .25s;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(3px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
 }
-.hp-cart-overlay.open { opacity: 1; pointer-events: all; }
+.cart-overlay.open { opacity: 1; pointer-events: all; }
 
-.hp-cart-drawer {
+.cart-drawer {
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 1000;
   width: 400px; max-width: 100vw;
-  background: #fff; box-shadow: -8px 0 40px rgba(0,0,0,.12);
+  background: #fff;
+  box-shadow: -8px 0 40px rgba(0,0,0,.12);
   display: flex; flex-direction: column;
   transform: translateX(100%);
   transition: transform .3s cubic-bezier(.4,0,.2,1);
 }
-.hp-cart-drawer.open { transform: translateX(0); }
+.cart-drawer.open { transform: translateX(0); }
 
-.hp-cart-head {
-  padding: 20px 24px; border-bottom: 1px solid #f1f5f9;
+.cart-drawer-head {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
   display: flex; align-items: center; justify-content: space-between;
   background: #fafafa;
 }
-.hp-cart-title {
+.cart-drawer-title {
   font-size: 18px; font-weight: 800; color: #0f172a;
   display: flex; align-items: center; gap: 10px;
 }
-.hp-cart-badge {
+.cart-drawer-badge {
   font-size: 11px; font-weight: 700;
   background: #6366f1; color: #fff;
-  border-radius: 20px; padding: 2px 10px;
+  border-radius: 20px; padding: 2px 9px;
 }
-.hp-cart-close {
-  width: 34px; height: 34px; background: #f1f5f9;
-  border: none; border-radius: 9px; font-size: 20px;
-  cursor: pointer; color: #64748b;
+.cart-drawer-close {
+  width: 34px; height: 34px;
+  background: #f1f5f9; border: none; border-radius: 9px;
+  font-size: 20px; cursor: pointer; color: #64748b;
   display: flex; align-items: center; justify-content: center;
   transition: background .12s;
 }
-.hp-cart-close:hover { background: #e2e8f0; color: #0f172a; }
+.cart-drawer-close:hover { background: #e2e8f0; color: #0f172a; }
 
-.hp-cart-list { flex: 1; overflow-y: auto; padding: 12px 24px; }
-.hp-cart-list::-webkit-scrollbar { width: 4px; }
-.hp-cart-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+.cart-items { flex: 1; overflow-y: auto; padding: 12px 24px; }
+.cart-items::-webkit-scrollbar { width: 4px; }
+.cart-items::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
 
-.hp-cart-empty {
+.cart-empty {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  height: 100%; gap: 10px; color: #94a3b8; padding: 40px 0;
+  height: 100%; gap: 10px; color: #94a3b8;
+  padding: 40px 0;
 }
-.hp-cart-empty-icon  { font-size: 52px; }
-.hp-cart-empty-title { font-size: 16px; font-weight: 700; color: #374151; }
-.hp-cart-empty-desc  { font-size: 13.5px; }
+.cart-empty-icon { font-size: 52px; }
+.cart-empty-title { font-size: 16px; font-weight: 700; color: #374151; }
+.cart-empty-desc  { font-size: 13.5px; }
 
-/* Cart item */
-.hp-ci {
+/* Cart item row */
+.cart-item {
   display: flex; align-items: center; gap: 12px;
   padding: 14px 0; border-bottom: 1px solid #f8fafc;
 }
-.hp-ci:last-child { border-bottom: none; }
-.hp-ci-img {
+.cart-item:last-child { border-bottom: none; }
+.cart-item-img {
   width: 56px; height: 56px; border-radius: 10px;
   background: #f1f5f9; border: 1px solid #e2e8f0;
-  flex-shrink: 0; overflow: hidden;
+  object-fit: cover; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
+  font-size: 22px; overflow: hidden;
 }
-.hp-ci-img img { width: 100%; height: 100%; object-fit: cover; }
-.hp-ci-info { flex: 1; min-width: 0; }
-.hp-ci-name {
+.cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name {
   font-size: 13.5px; font-weight: 700; color: #0f172a;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   margin-bottom: 3px;
 }
-.hp-ci-price { font-size: 13px; font-weight: 700; color: #6366f1; }
-.hp-ci-unit  { font-size: 11.5px; color: #94a3b8; font-weight: 400; margin-left: 4px; }
+.cart-item-price { font-size: 13px; font-weight: 700; color: #6366f1; }
+.cart-item-unit  { font-size: 11.5px; color: #94a3b8; margin-left: 4px; font-weight: 400; }
 
-.hp-ci-qty { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.hp-ci-qty-btn {
+/* Qty controls */
+.cart-qty {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.cart-qty-btn {
   width: 28px; height: 28px;
   background: #f1f5f9; border: 1px solid #e2e8f0;
-  border-radius: 8px; cursor: pointer;
-  font-size: 16px; font-weight: 700;
+  border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
-  color: #374151; transition: all .12s; flex-shrink: 0;
+  color: #374151; transition: background .12s, border-color .12s;
+  flex-shrink: 0;
 }
-.hp-ci-qty-btn:hover:not(:disabled) { background: #eef2ff; border-color: #6366f1; color: #6366f1; }
-.hp-ci-qty-btn:disabled { opacity: .3; cursor: not-allowed; }
-.hp-ci-qty-num { font-size: 14px; font-weight: 700; min-width: 22px; text-align: center; color: #0f172a; }
+.cart-qty-btn:hover:not(:disabled) { background: #e0e7ff; border-color: #6366f1; color: #6366f1; }
+.cart-qty-btn:disabled { opacity: .3; cursor: not-allowed; }
+.cart-qty-num { font-size: 14px; font-weight: 700; min-width: 22px; text-align: center; color: #0f172a; }
 
-.hp-ci-rm {
+.cart-remove {
   width: 28px; height: 28px; flex-shrink: 0;
   background: #fff1f2; border: 1px solid #fecdd3;
   border-radius: 8px; cursor: pointer; font-size: 13px;
   display: flex; align-items: center; justify-content: center;
   color: #e11d48; transition: background .12s;
 }
-.hp-ci-rm:hover { background: #ffe4e6; }
+.cart-remove:hover { background: #ffe4e6; }
 
-.hp-cart-foot {
-  padding: 18px 24px; border-top: 1px solid #f1f5f9; background: #fafafa;
+/* Cart footer */
+.cart-footer {
+  padding: 18px 24px;
+  border-top: 1px solid #f1f5f9;
+  background: #fafafa;
 }
-.hp-cart-total {
+.cart-total-row {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 14px;
 }
-.hp-cart-total-label { font-size: 14px; color: #64748b; font-weight: 500; }
-.hp-cart-total-val   { font-size: 22px; font-weight: 800; color: #0f172a; }
-
-.hp-cart-btn-checkout {
-  width: 100%; height: 48px; background: #6366f1; color: #fff;
-  border: none; border-radius: 12px; font-family: inherit;
-  font-size: 15px; font-weight: 700; cursor: pointer; margin-bottom: 8px;
+.cart-total-label { font-size: 14px; color: #64748b; font-weight: 500; }
+.cart-total-val   { font-size: 22px; font-weight: 800; color: #0f172a; }
+.cart-btn-checkout {
+  width: 100%; height: 48px;
+  background: #6366f1; color: #fff;
+  border: none; border-radius: 12px;
+  font-family: inherit; font-size: 15px; font-weight: 700;
+  cursor: pointer; margin-bottom: 8px;
   transition: background .15s, transform .1s;
 }
-.hp-cart-btn-checkout:hover { background: #4f46e5; transform: translateY(-1px); }
-
-.hp-cart-btn-continue {
-  width: 100%; height: 42px; background: #fff; color: #64748b;
-  border: 1.5px solid #e2e8f0; border-radius: 12px; font-family: inherit;
-  font-size: 13.5px; font-weight: 600; cursor: pointer;
-  transition: border-color .12s, color .12s;
+.cart-btn-checkout:hover { background: #4f46e5; transform: translateY(-1px); }
+.cart-btn-continue {
+  width: 100%; height: 42px;
+  background: #fff; color: #64748b;
+  border: 1.5px solid #e2e8f0; border-radius: 12px;
+  font-family: inherit; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; transition: border-color .12s, color .12s;
 }
-.hp-cart-btn-continue:hover { border-color: #94a3b8; color: #374151; }
+.cart-btn-continue:hover { border-color: #94a3b8; color: #374151; }
 
-/* btn-added state on product card */
+/* Add animation on product card button */
 .btn-added {
   background: #d1fae5 !important;
   color: #065f46 !important;
@@ -181,53 +193,23 @@ const CART_CSS = `
 `;
 
 function injectCartCSS() {
-  if (document.getElementById('hp-cart-css')) return;
+  if (document.getElementById('cart-css')) return;
   const el = document.createElement('style');
-  el.id = 'hp-cart-css';
+  el.id = 'cart-css';
   el.textContent = CART_CSS;
   document.head.appendChild(el);
 }
 
-/* ─── Cart Item component ──────────────────────────────── */
-function CartItem({ item, onIncrease, onDecrease, onRemove }) {
-  return (
-    <div className="hp-ci">
-      <div className="hp-ci-img">
-        {item.image
-          ? <img src={item.image} alt={item.name} onError={e => { e.target.style.display = 'none'; }} />
-          : '📦'}
-      </div>
-      <div className="hp-ci-info">
-        <div className="hp-ci-name">{item.name}</div>
-        <div className="hp-ci-price">
-          ${(Number(item.price) * item.qty).toFixed(2)}
-          {item.qty > 1 && (
-            <span className="hp-ci-unit">(${Number(item.price).toFixed(2)} × {item.qty})</span>
-          )}
-        </div>
-      </div>
-      <div className="hp-ci-qty">
-        <button className="hp-ci-qty-btn" onClick={() => onDecrease(item.id)}>−</button>
-        <span className="hp-ci-qty-num">{item.qty}</span>
-        <button
-          className="hp-ci-qty-btn"
-          onClick={() => onIncrease(item.id)}
-          disabled={item.qty >= item.maxQty}
-        >+</button>
-      </div>
-      <button className="hp-ci-rm" onClick={() => onRemove(item.id)}>🗑</button>
-    </div>
-  );
-}
-
-/* ─── Product Card ─────────────────────────────────────── */
+/* ─── Sub-components ──────────────────────────────────── */
 function ProductCard({ product, onAddToCart, onBuyNow, onViewDetail, inCart }) {
   const outOfStock = product.quantity <= 0;
   return (
     <div className="product-card">
       <div className="product-img-wrap">
         <img
-          src={product.image} alt={product.name} className="product-img"
+          src={product.image}
+          alt={product.name}
+          className="product-img"
           onError={e => { e.target.style.display = 'none'; }}
         />
       </div>
@@ -268,32 +250,59 @@ function BenefitCard({ benefit }) {
   );
 }
 
+/* ─── Cart Item ───────────────────────────────────────── */
+function CartItem({ item, onIncrease, onDecrease, onRemove }) {
+  return (
+    <div className="cart-item">
+      <div className="cart-item-img">
+        {item.image
+          ? <img src={item.image} alt={item.name} onError={e=>{e.target.style.display='none'}} />
+          : '📦'}
+      </div>
+      <div className="cart-item-info">
+        <div className="cart-item-name">{item.name}</div>
+        <div className="cart-item-price">
+          ${(Number(item.price) * item.qty).toFixed(2)}
+          {item.qty > 1 && (
+            <span className="cart-item-unit">
+              (${Number(item.price).toFixed(2)} × {item.qty})
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="cart-qty">
+        <button className="cart-qty-btn" onClick={() => onDecrease(item.id)}>−</button>
+        <span className="cart-qty-num">{item.qty}</span>
+        <button
+          className="cart-qty-btn"
+          onClick={() => onIncrease(item.id)}
+          disabled={item.qty >= item.maxQty}
+        >+</button>
+      </div>
+      <button className="cart-remove" onClick={() => onRemove(item.id)} title="Remove">🗑</button>
+    </div>
+  );
+}
+
 /* ─── Main Page ───────────────────────────────────────── */
 export default function HomePage() {
   const navigate = useNavigate();
-
-  const [categories, setCategories] = useState([]);
-  const [products,   setProducts]   = useState([]);
-  const [loading,    setLoading]    = useState(true);
-
-  // ── Cart state (sync with localStorage) ──
-  const [cart,     setCart]     = useState(getCart);
-  const [cartOpen, setCartOpen] = useState(false);
+  const [products,  setProducts]  = useState([]);
+  const [loading,   setLoading]   = useState(true);
+  const [cart,      setCart]      = useState(getCart);   // load from localStorage
+  const [cartOpen,  setCartOpen]  = useState(false);
 
   useEffect(() => { injectCartCSS(); }, []);
 
-  /* ── Load products & categories ── */
+  /* ── Load products ── */
   useEffect(() => {
     const load = async () => {
       try {
         const token = localStorage.getItem('token');
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const [catRes, prodRes] = await Promise.all([
-          api.get('/customer/products/list', { headers }),
-          api.get('/customer/products/list', { headers }),
-        ]);
-        setCategories(catRes.data?.data || []);
-        setProducts(prodRes.data?.data  || []);
+        const res = await api.get('/customer/products/list', { headers });
+        const list = res.data?.data ?? res.data ?? [];
+        setProducts(Array.isArray(list) ? list : []);
       } catch (err) {
         console.error('Failed to load:', err);
       } finally {
@@ -303,36 +312,30 @@ export default function HomePage() {
     load();
   }, []);
 
-  /* ── Sync cart → localStorage every change ── */
+  /* ── Sync cart → localStorage every time cart changes ── */
   useEffect(() => {
     saveCart(cart);
   }, [cart]);
 
-  /* ── Cart computed ── */
-  const cartIds   = new Set(cart.map(c => c.id));
+  /* ── Cart helpers ── */
+  const cartIds  = new Set(cart.map(c => c.id));
   const cartCount = cart.reduce((s, c) => s + c.qty, 0);
   const cartTotal = cart.reduce((s, c) => s + Number(c.price) * c.qty, 0);
 
-  /* ── Add to cart ── */
   const addToCart = (product) => {
     setCart(prev => {
       const exists = prev.find(c => c.id === product.id);
       if (exists) {
         if (exists.qty >= exists.maxQty) return prev;
-        return prev.map(c =>
-          c.id === product.id ? { ...c, qty: c.qty + 1 } : c
-        );
+        return prev.map(c => c.id === product.id ? { ...c, qty: c.qty + 1 } : c);
       }
       return [...prev, {
-        id:     product.id,
-        name:   product.name,
-        price:  product.price,
-        image:  product.image,
-        qty:    1,
-        maxQty: product.quantity,
+        id: product.id, name: product.name,
+        price: product.price, image: product.image,
+        qty: 1, maxQty: product.quantity,
       }];
     });
-    setCartOpen(true); // ← open drawer ពេល add
+    setCartOpen(true);
   };
 
   const increase = (id) =>
@@ -351,50 +354,50 @@ export default function HomePage() {
   const removeFromCart = (id) =>
     setCart(prev => prev.filter(c => c.id !== id));
 
-  /* ── Buy now ── */
   const handleBuyNow = (product) => {
-    navigate(`/checkout?product=${product.id}`);
+    addToCart(product);
+    setCartOpen(true);
   };
 
-  /* ── Checkout ── */
+  const handleViewDetail = (p) => navigate(`/product/${p.id}`);
+
   const handleCheckout = () => {
     const token = localStorage.getItem('token');
     if (!token) { navigate('/login'); return; }
-    navigate('/checkout');
+    navigate('/dashboard/customer/orders/add', { state: { cartItems: cart } });
   };
 
-  /* ── View detail ── */
-  const handleViewDetail = (p) => navigate(`/product/${p.id}`);
-
-  /* ══ Render ══ */
+  /* ── Render ── */
   return (
     <div className="page">
 
-      {/* ── Cart Overlay ── */}
+      {/* ══ Cart Overlay ══ */}
       <div
-        className={`hp-cart-overlay${cartOpen ? ' open' : ''}`}
+        className={`cart-overlay${cartOpen ? ' open' : ''}`}
         onClick={() => setCartOpen(false)}
       />
 
-      {/* ── Cart Drawer ── */}
-      <div className={`hp-cart-drawer${cartOpen ? ' open' : ''}`}>
+      {/* ══ Cart Drawer ══ */}
+      <div className={`cart-drawer${cartOpen ? ' open' : ''}`}>
 
-        <div className="hp-cart-head">
-          <div className="hp-cart-title">
-            🛒 Cart
+        {/* Header */}
+        <div className="cart-drawer-head">
+          <div className="cart-drawer-title">
+            🛒 My Cart
             {cartCount > 0 && (
-              <span className="hp-cart-badge">{cartCount} items</span>
+              <span className="cart-drawer-badge">{cartCount} items</span>
             )}
           </div>
-          <button className="hp-cart-close" onClick={() => setCartOpen(false)}>×</button>
+          <button className="cart-drawer-close" onClick={() => setCartOpen(false)}>×</button>
         </div>
 
-        <div className="hp-cart-list">
+        {/* Items */}
+        <div className="cart-items">
           {cart.length === 0 ? (
-            <div className="hp-cart-empty">
-              <div className="hp-cart-empty-icon">🛒</div>
-              <div className="hp-cart-empty-title">Your cart is empty</div>
-              <div className="hp-cart-empty-desc">Click "Add" on a product to start</div>
+            <div className="cart-empty">
+              <div className="cart-empty-icon">🛒</div>
+              <div className="cart-empty-title">Your cart is empty</div>
+              <div className="cart-empty-desc">Add products to get started</div>
             </div>
           ) : (
             cart.map(item => (
@@ -409,23 +412,24 @@ export default function HomePage() {
           )}
         </div>
 
+        {/* Footer */}
         {cart.length > 0 && (
-          <div className="hp-cart-foot">
-            <div className="hp-cart-total">
-              <span className="hp-cart-total-label">Total ({cartCount} items)</span>
-              <span className="hp-cart-total-val">${cartTotal.toFixed(2)}</span>
+          <div className="cart-footer">
+            <div className="cart-total-row">
+              <span className="cart-total-label">Total ({cartCount} items)</span>
+              <span className="cart-total-val">${cartTotal.toFixed(2)}</span>
             </div>
-            <button className="hp-cart-btn-checkout" onClick={handleCheckout}>
+            <button className="cart-btn-checkout" onClick={handleCheckout}>
               Checkout →
             </button>
-            <button className="hp-cart-btn-continue" onClick={() => setCartOpen(false)}>
+            <button className="cart-btn-continue" onClick={() => setCartOpen(false)}>
               Continue Shopping
             </button>
           </div>
         )}
       </div>
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <section className="hero">
         <div className="hero-text">
           <span className="hero-tag">Premium Audio</span>
@@ -453,7 +457,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Featured Products ── */}
+      {/* Featured Products */}
       <section className="section">
         <div className="section-head">
           <h2 className="section-title">Featured Products</h2>
@@ -483,7 +487,7 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── Benefits ── */}
+      {/* Benefits */}
       <section className="section benefits-section">
         <div className="benefits-grid">
           {BENEFITS.map((b, i) => (

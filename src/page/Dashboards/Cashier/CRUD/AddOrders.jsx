@@ -276,7 +276,7 @@ const AddOrders = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const res = await api.get("/cashier/customers", {
+        const res = await api.get("/cashier/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCustomers(res.data.data || []); // <-- important fix

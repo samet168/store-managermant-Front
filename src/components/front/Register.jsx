@@ -5,7 +5,7 @@ import api from '../../services/api';
 export default function Register() {
   const navigate = useNavigate();
 
-  const [form, setForm] = React.useState({ name: '', email: '', password: '' });
+  const [form,    setForm]    = React.useState({ name: '', email: '', password: '', phone: '' });
   const [loading, setLoading] = React.useState(false);
   const [error,   setError]   = React.useState('');
   const [errors,  setErrors]  = React.useState({});
@@ -13,15 +13,14 @@ export default function Register() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    // clear field-level error on change
     setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim())            e.name     = 'Username is required.';
-    if (!form.email.trim())           e.email    = 'Email is required.';
-    if (form.password.length < 8)     e.password = 'Password must be at least 8 characters.';
+    if (!form.name.trim())        e.name     = 'Name is required.';
+    if (!form.email.trim())       e.email    = 'Email is required.';
+    if (form.password.length < 6) e.password = 'Password must be at least 6 characters.';
     return e;
   };
 
@@ -33,19 +32,41 @@ export default function Register() {
 
     setLoading(true);
     try {
-      await api.post('/register', form);
-      navigate('/login');
+      // ✅ Send as customer (backend creates Customer record)
+      const { data } = await api.post('/register', {
+        name:     form.name,
+        email:    form.email,
+        password: form.password,
+        phone:    form.phone,
+        type:     'customer', // ← register as customer
+      });
+
+      // ── Auto login after register ──
+      localStorage.setItem('token',     data.token);
+      localStorage.setItem('user_name', data.user.name);
+      localStorage.setItem('user_role', data.user.role);
+      localStorage.setItem('user_id',   data.user.id);
+
+      navigate('/'); // customer → homepage
+
     } catch (err) {
-      const msg = err.response?.data?.message;
+      const msg          = err.response?.data?.message;
       const serverErrors = err.response?.data?.errors;
-      if (serverErrors) setErrors(serverErrors);
-      else setError(msg || 'Registration failed. Please try again.');
+      if (serverErrors) {
+        // Laravel validation errors: { email: ['...'] }
+        const flat = {};
+        Object.entries(serverErrors).forEach(([k, v]) => {
+          flat[k] = Array.isArray(v) ? v[0] : v;
+        });
+        setErrors(flat);
+      } else {
+        setError(msg || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // progress: 1 field filled = 1 step, etc.
   const filled = [form.name, form.email, form.password].filter(Boolean).length;
 
   return (
@@ -58,7 +79,6 @@ export default function Register() {
 
         <div className="rp__card">
 
-          {/* Brand */}
           <div className="rp__brand">
             <span className="rp__brand-dot" />
             <span className="rp__brand-name">StoreFront</span>
@@ -74,22 +94,21 @@ export default function Register() {
             ))}
           </div>
 
-          {/* Global error */}
           {error && <div className="rp__error">{error}</div>}
 
           <form onSubmit={handleSubmit} className="rp__form" noValidate>
 
             {/* Name */}
             <div className="rp__field">
-              <label className="rp__label" htmlFor="name">Username</label>
+              <label className="rp__label" htmlFor="name">Full Name</label>
               <div className="rp__inp-wrap">
                 <UserIcon />
                 <input
                   id="name" name="name" type="text"
                   className={`rp__input ${errors.name ? 'rp__input--err' : ''}`}
-                  placeholder="e.g. sophea123"
+                  placeholder="e.g. Sophea Chan"
                   value={form.name} onChange={handleChange}
-                  autoComplete="username"
+                  autoComplete="name"
                 />
               </div>
               {errors.name && <span className="rp__field-err">{errors.name}</span>}
@@ -111,6 +130,21 @@ export default function Register() {
               {errors.email && <span className="rp__field-err">{errors.email}</span>}
             </div>
 
+            {/* Phone */}
+            <div className="rp__field">
+              <label className="rp__label" htmlFor="phone">Phone <span style={{color:'rgba(255,255,255,0.25)',fontWeight:400}}>(optional)</span></label>
+              <div className="rp__inp-wrap">
+                <PhoneIcon />
+                <input
+                  id="phone" name="phone" type="tel"
+                  className="rp__input"
+                  placeholder="+855 12 345 678"
+                  value={form.phone} onChange={handleChange}
+                  autoComplete="tel"
+                />
+              </div>
+            </div>
+
             {/* Password */}
             <div className="rp__field">
               <label className="rp__label" htmlFor="password">Password</label>
@@ -119,14 +153,14 @@ export default function Register() {
                 <input
                   id="password" name="password" type="password"
                   className={`rp__input ${errors.password ? 'rp__input--err' : ''}`}
-                  placeholder="Min 8 characters"
+                  placeholder="Min 6 characters"
                   value={form.password} onChange={handleChange}
                   autoComplete="new-password"
                 />
               </div>
               {errors.password
                 ? <span className="rp__field-err">{errors.password}</span>
-                : <span className="rp__hint">Use letters, numbers & symbols for a strong password</span>
+                : <span className="rp__hint">Use letters, numbers & symbols</span>
               }
             </div>
 
@@ -153,24 +187,32 @@ export default function Register() {
   );
 }
 
-/* ── SVG Icons ──────────────────────────────────────────────── */
+/* ── Icons ── */
 const UserIcon = () => (
   <svg className="rp__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+    <circle cx="12" cy="7" r="4"/>
   </svg>
 );
 const MailIcon = () => (
   <svg className="rp__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/>
+    <rect x="2" y="4" width="20" height="16" rx="2"/>
+    <path d="M2 7l10 7 10-7"/>
   </svg>
 );
 const LockIcon = () => (
   <svg className="rp__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+    <rect x="3" y="11" width="18" height="11" rx="2"/>
+    <path d="M7 11V7a5 5 0 0110 0v4"/>
+  </svg>
+);
+const PhoneIcon = () => (
+  <svg className="rp__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.12 1.22 2 2 0 012.1 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
   </svg>
 );
 
-/* ── Styles ─────────────────────────────────────────────────── */
+/* ── CSS ── */
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
 

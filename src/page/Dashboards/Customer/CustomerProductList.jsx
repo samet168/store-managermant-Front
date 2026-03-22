@@ -404,7 +404,7 @@ const CustomerProductList = () => {
   const handlePrev = () =>
     currentPage > 1 && fetchProducts(currentPage - 1, search);
 
-  const handleAdd = () => navigate("/dashboard/customer/products/add");
+
   const handleEdit = (id) => navigate(`/dashboard/customer/products/edit/${id}`);
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure to delete this product?")) return;
@@ -437,9 +437,7 @@ const CustomerProductList = () => {
               🔍
             </button>
           </div>
-          <button className="prod-btn-add" onClick={handleAdd}>
-            + Add Product
-          </button>
+
         </div>
       </div>
 

@@ -18,9 +18,20 @@ export default function Login() {
     setLoading(true);
     try {
       const { data } = await api.post('/login', form);
+
+      // ── Save to localStorage ──
       localStorage.setItem('token',     data.token);
       localStorage.setItem('user_name', data.user.name);
-      navigate('/dashboard');
+      localStorage.setItem('user_role', data.user.role);
+      localStorage.setItem('user_id',   data.user.id);
+
+      // ── Redirect based on role ──
+      const role = data.user.role;
+      if (role === 'admin')    navigate('/dashboard/admin');
+      else if (role === 'cashier')  navigate('/dashboard/cashier');
+      else if (role === 'supplier') navigate('/dashboard/supplier');
+      else navigate('/'); // customer → homepage
+
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password.');
     } finally {
@@ -77,6 +88,10 @@ export default function Login() {
               {loading ? <span className="lp__spinner" /> : 'Sign In'}
             </button>
 
+            <p className="lp__signup">
+              Don't have an account? <Link to="/register" className="lp__link">Sign Up</Link>
+            </p>
+
           </form>
 
           <div className="lp__divider">
@@ -84,8 +99,6 @@ export default function Login() {
             <span className="lp__divider-text">or</span>
             <span className="lp__divider-line" />
           </div>
-
-
 
         </div>
       </div>
@@ -161,9 +174,9 @@ const css = `
   .lp__divider-line { flex:1; height:1px; background:rgba(255,255,255,0.08); }
   .lp__divider-text { font-size:0.75rem; color:rgba(255,255,255,0.25); }
 
-  .lp__footer { text-align:center; font-size:0.85rem; color:rgba(255,255,255,0.35); }
-  .lp__footer-link { color:#00d8ff; text-decoration:none; font-weight:500; transition:opacity 0.2s; }
-  .lp__footer-link:hover { opacity:0.8; text-decoration:underline; }
+  .lp__signup { text-align:center; font-size:0.85rem; color:rgba(255,255,255,0.35); }
+  .lp__link { color:#00d8ff; text-decoration:none; font-weight:500; }
+  .lp__link:hover { text-decoration:underline; }
 
   @media (max-width:480px) {
     .lp__card { padding:32px 24px; }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 
+// ── CSS ────────────────────────────────────────────────────
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -243,7 +244,6 @@ const CSS = `
   .ao-btn-save, .ao-btn-cancel { width: 100%; text-align: center; }
 }
 `;
-
 function injectStyles() {
   if (document.getElementById('ao-styles')) return;
   const tag = document.createElement('style');
@@ -258,9 +258,8 @@ const AddOrders = () => {
 
   const [customers, setCustomers] = useState([]);
   const [productsList, setProductsList] = useState([]);
-
   const [form, setForm] = useState({
-    customer_id: '',
+    user_id: '',
     status: 'pending',
     products: [{ product_id: '', quantity: 1, price: 0 }],
   });
@@ -274,15 +273,15 @@ const AddOrders = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const res = await api.get('/admin/customers', { headers: { Authorization: `Bearer ${token}` } });
-        setCustomers(res.data.data || []); // <-- important fix
+        const res = await api.get('/admin/users', { headers: { Authorization: `Bearer ${token}` } });
+        setCustomers(res.data.data || []);
       } catch (err) { console.error(err); }
     };
 
     const fetchProducts = async () => {
       try {
         const res = await api.get('/admin/products', { headers: { Authorization: `Bearer ${token}` } });
-        setProductsList(res.data.data || []); // <-- important fix
+        setProductsList(res.data.data || []);
       } catch (err) { console.error(err); }
     };
 
@@ -291,13 +290,25 @@ const AddOrders = () => {
   }, [token]);
 
   // Handle form changes
-  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    let value = e.target.value;
+    if (e.target.name === 'user_id') value = Number(value); // ensure number
+    setForm((p) => ({ ...p, [e.target.name]: value }));
+  };
+
   const handleProductChange = (index, e) => {
+    let value = e.target.value;
+    if (['product_id', 'quantity', 'price'].includes(e.target.name)) value = Number(value);
     const updated = [...form.products];
-    updated[index] = { ...updated[index], [e.target.name]: e.target.value };
+    updated[index] = { ...updated[index], [e.target.name]: value };
     setForm((p) => ({ ...p, products: updated }));
   };
-  const addProduct = () => setForm((p) => ({ ...p, products: [...p.products, { product_id: '', quantity: 1, price: 0 }] }));
+
+  const addProduct = () => setForm((p) => ({
+    ...p, 
+    products: [...p.products, { product_id: '', quantity: 1, price: 0 }]
+  }));
+
   const removeProduct = (index) => {
     if (form.products.length === 1) return;
     setForm((p) => ({ ...p, products: p.products.filter((_, i) => i !== index) }));
@@ -314,8 +325,33 @@ const AddOrders = () => {
     e.preventDefault();
     setError('');
     setSaving(true);
+
+    // Validation: ensure customer selected
+    if (!form.user_id) {
+      setError('Please select a customer!');
+      setSaving(false);
+      return;
+    }
+
+    // Validate products
+    for (let i = 0; i < form.products.length; i++) {
+      const p = form.products[i];
+      if (!p.product_id || p.quantity <= 0 || p.price < 0) {
+        setError(`Product ${i + 1} is invalid`);
+        setSaving(false);
+        return;
+      }
+    }
+
     try {
-      await api.post('/admin/orders', form, { headers: { Authorization: `Bearer ${token}` } });
+      console.log('Submitting order:', form); // debug
+      await api.post('/admin/orders', form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      
       navigate('/dashboard/admin/orders');
     } catch (err) {
       console.error(err);
@@ -323,6 +359,7 @@ const AddOrders = () => {
     } finally {
       setSaving(false);
     }
+    console.log('Submitting order:', form);
   };
 
   return (
@@ -351,8 +388,8 @@ const AddOrders = () => {
               <label className="ao-label">Customer <span className="ao-req">*</span></label>
               <select
                 className="ao-select"
-                name="customer_id"
-                value={form.customer_id}
+                name="user_id"
+                value={form.user_id}
                 onChange={handleChange}
                 required
               >
