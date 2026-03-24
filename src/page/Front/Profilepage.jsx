@@ -280,7 +280,7 @@ export default function ProfilePage() {
         // Load profile + orders in parallel
         const [profRes, ordRes] = await Promise.all([
           api.get('/customer/profile', { headers }).catch(() => null),
-          api.get('/customer/orders/list', { params: { page: 1 }, headers }).catch(() => ({ data: { data: [] } })),
+          api.get('/customer/orders/listS', { params: { page: 1 }, headers }).catch(() => ({ data: { data: [] } })),
         ]);
 
         // Profile — fallback to localStorage name
@@ -648,7 +648,7 @@ export default function ProfilePage() {
               {[
                 { label: '🛒 My Orders',   path: '/dashboard/customer/orders' },
                 { label: '📦 Browse Products', path: '/' },
-                { label: '🛍 Cart',        path: '/cart' },
+                { label: '🛍 Cart',        path: '/checkout' },
               ].map(link => (
                 <button key={link.path}
                   onClick={() => navigate(link.path)}

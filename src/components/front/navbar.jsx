@@ -428,7 +428,7 @@ export default function Navbar() {
         <div className="nb__sep" />
 
         {/* Cart icon */}
-        <Link to="/cart" className="nb__cart" title="Cart">
+        <Link to="/checkout" className="nb__cart" title="Cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
             <circle cx="9"  cy="21" r="1"/>
             <circle cx="20" cy="21" r="1"/>
@@ -468,7 +468,7 @@ export default function Navbar() {
                   onClick={() => setDropOpen(false)}>
                   🛍 My Orders
                 </Link>
-                <Link to="/cart" className="nb__dropdown-item"
+                <Link to="/checkout" className="nb__dropdown-item"
                   onClick={() => setDropOpen(false)}>
                   🛒 Cart
                   {cartCount > 0 && (
@@ -516,7 +516,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <Link to="/cart" className="nb__drawer-cart">
+            <Link to="/checkout" className="nb__drawer-cart">
               🛒 Cart
               {cartCount > 0 && (
                 <span className="nb__drawer-cart-count">{cartCount}</span>

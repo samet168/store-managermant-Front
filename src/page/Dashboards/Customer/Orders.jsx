@@ -314,7 +314,7 @@ const Orders = () => {
   const fetchOrders = async (page = 1, searchTerm = '') => {
     setLoading(true);
     try {
-      const res = await api.get(`customer/orders/list?page=${page}&search=${searchTerm}`, {
+      const res = await api.get(`customer/orders/listS?page=${page}&search=${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data.data);

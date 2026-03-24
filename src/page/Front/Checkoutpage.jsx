@@ -935,7 +935,7 @@ export default function CheckoutPage() {
           </div>
           <div className="ck-success-btns">
             <button className="ck-success-btn-orders"
-              onClick={() => navigate('/dashboard/customer/orders')}>
+              onClick={() => navigate('/profile')}>
               View Orders
             </button>
             <button className="ck-success-btn-home"
@@ -1000,7 +1000,7 @@ export default function CheckoutPage() {
           <div className="ck-empty-icon">🛒</div>
           <div className="ck-empty-title">Your cart is empty</div>
           <div className="ck-empty-desc">Add some products before checking out.</div>
-          <button className="ck-btn-back" onClick={() => navigate('/')}>
+          <button className="ck-btn-back" onClick={() => navigate('/products')}>
             Continue Shopping
           </button>
         </div>
